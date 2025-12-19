@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Álbum - Para Ti</title>
+    <style>
+        :root {
+            --palo-rosa: #d4a5a5;
+            --celeste: #a8d8e6;
+            --beige: #f5e6d3;
+            --marron: #8b7355;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(180deg, #87ceeb 0%, #b8e6f5 20%, #d4e8f0 40%, #f5e6d3 70%, #e8c4c4 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Decoración floral de fondo */
+        .floral-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .vine {
+            position: absolute;
+            font-size: 3em;
+            opacity: 0.2;
+            animation: grow 3s ease-out;
+        }
+
+        .vine-left { left: 0; top: 0; transform-origin: top left; }
+        .vine-right { right: 0; top: 0; transform-origin: top right; }
+
+        .floating-petal {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--palo-rosa);
+            border-radius: 50% 0 50% 0;
+            opacity: 0.4;
+            animation: drift 25s linear infinite;
+        }
+
+        .menu-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            padding: 60px 20px;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--palo-rosa);
+            border-radius: 50px;
+            color: var(--marron);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            background: rgba(212, 165, 165, 0.3);
+            transform: translateX(-3px);
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .menu-header h2 {
+            font-size: 3.5em;
+            margin-bottom: 16px;
+            font-weight: 300;
+            letter-spacing: 6px;
+            background: linear-gradient(135deg, var(--palo-rosa), var(--celeste));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .menu-header p {
+            color: var(--marron);
+            font-size: 1.2em;
+            font-weight: 300;
+        }
+
+        .songs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .song-card {
+            padding: 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            text-decoration: none;
+            color: var(--marron);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--palo-rosa);
+            transition: all 0.4s ease;
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .song-card:nth-child(1) { animation-delay: 0.1s; }
+        .song-card:nth-child(2) { animation-delay: 0.2s; }
+        .song-card:nth-child(3) { animation-delay: 0.3s; }
+        .song-card:nth-child(4) { animation-delay: 0.4s; }
+        .song-card:nth-child(5) { animation-delay: 0.5s; }
+        .song-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .song-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--celeste);
+            box-shadow: 0 15px 35px rgba(139, 115, 85, 0.2);
+        }
+
+        .song-cover {
+            width: 90px;
+            height: 90px;
+            border-radius: 16px;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+            border: 2px solid rgba(212, 165, 165, 0.3);
+            box-shadow: 0 4px 15px rgba(139, 115, 85, 0.15);
+        }
+
+        .song-card:hover .song-cover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        .song-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .song-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--palo-rosa);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .song-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--marron);
+        }
+
+        .song-artist {
+            color: var(--marron);
+            opacity: 0.7;
+            font-size: 0.95em;
+        }
+
+        .play-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--palo-rosa), var(--celeste));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+            transition: all 0.3s ease;
+        }
+
+        .play-icon::before {
+            content: '▶';
+        }
+
+        .song-card:hover .play-icon {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(212, 165, 165, 0.5);
+        }
+
+        @keyframes grow {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 0.2; }
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, -100vh) rotate(0deg); }
+            100% { transform: translate(50vw, 100vh) rotate(720deg); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .menu-header h2 { font-size: 2.5em; }
+            .song-cover { width: 70px; height: 70px; }
+            .song-title { font-size: 1.2em; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Decoración floral -->
+    <div class="floral-bg">
+        <div class="vine vine-left">🌿🌸🌿</div>
+        <div class="vine vine-right">🌿�🌿</div>
+        <div id="petals"></div>
+    </div>
+
+    <a href="index.html" class="back-btn">← Volver</a>
+
+    <div class="menu-container">
+        <div class="menu-header">
+            <h2>🌸 Capítulos 🌸</h2>
+            <p>Elige un recuerdo para comenzar...</p>
+        </div>
+        <div class="songs-grid" id="songsGrid"></div>
+    </div>
+
+    <script src="js/tracks.js"></script>
+    <script>
+        // Verificar autenticación
+        if (!sessionStorage.getItem('authenticated')) {
+            window.location.href = 'login.html';
+        }
+
+        // Crear pétalos flotantes
+        const petalsContainer = document.getElementById('petals');
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'floating-petal';
+            petal.style.left = Math.random() * 100 + '%';
+            petal.style.animationDuration = (Math.random() * 15 + 20) + 's';
+            petal.style.animationDelay = Math.random() * 5 + 's';
+            petalsContainer.appendChild(petal);
+            
+            setTimeout(() => petal.remove(), 30000);
+        }
+
+        for (let i = 0; i < 12; i++) {
+            setTimeout(createPetal, i * 1000);
+        }
+
+        setInterval(createPetal, 3000);
+
+        // Cargar canciones
+        const grid = document.getElementById('songsGrid');
+        
+        tracks.forEach((track) => {
+            const card = document.createElement('a');
+            card.href = `player.html?id=${track.id}`;
+            card.className = 'song-card';
+            
+            // Usar la imagen de portada si existe, sino usar el gradiente
+            const coverStyle = track.coverImage 
+                ? `background-image: url('${track.coverImage}'); background-size: cover; background-position: center;`
+                : `background: ${getCoverGradient(track.coverGradient)}`;
+            
+            card.innerHTML = `
+                <div class="song-cover" style="${coverStyle}"></div>
+                <div class="song-info">
+                    <div class="song-label">${track.description}</div>
+                    <div class="song-title">${track.title}</div>
+                    <div class="song-artist">${track.artist}</div>
+                </div>
+                <div class="play-icon"></div>
+            `;
+            
+            grid.appendChild(card);
+        });
+
+        function getCoverGradient(gradientClass) {
+            const colors = {
+                'pink-500': '#ec4899',
+                'rose-500': '#f43f5e',
+                'red-500': '#ef4444',
+                'orange-400': '#fb923c',
+                'blue-400': '#60a5fa',
+                'indigo-500': '#6366f1',
+                'purple-500': '#a855f7',
+                'purple-600': '#9333ea',
+                'emerald-400': '#34d399',
+                'teal-500': '#14b8a6',
+                'cyan-500': '#06b6d4',
+                'fuchsia-500': '#d946ef',
+                'amber-400': '#fbbf24'
+            };
+            
+            const gradientColors = gradientClass
+                .replace('from-', '')
+                .replace('via-', '')
+                .replace('to-', '')
+                .split(' ')
+                .map(c => colors[c] || '#ec4899');
+            
+            return `linear-gradient(135deg, ${gradientColors.join(', ')})`;
+        }
+    </script>
+</body>
+</html>

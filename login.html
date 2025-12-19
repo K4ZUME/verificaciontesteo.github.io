@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Variables - Acceso Restringido</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 420px;
+            padding: 48px 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #4a5568;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f7fafc;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+            border-left: 4px solid #c53030;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: shake 0.4s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 32px;
+            color: #a0aec0;
+            font-size: 13px;
+        }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+            color: #718096;
+            font-size: 12px;
+        }
+
+        .security-badge::before {
+            content: "🔒";
+            font-size: 14px;
+        }
+
+        .info-text {
+            background: #edf2f7;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #4a5568;
+            margin-bottom: 24px;
+            border-left: 3px solid #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="header">
+            <div class="logo">C</div>
+            <h1>Sistema de Variables</h1>
+            <p>Control de Acceso Administrativo</p>
+        </div>
+
+        <div class="info-text">
+            ⚠️ Acceso restringido solo para personal autorizado. Todas las sesiones son monitoreadas.
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            Usuario o contraseña incorrectos. Intento registrado.
+        </div>
+
+        <form id="loginForm" onsubmit="return handleLogin(event)">
+            <div class="form-group">
+                <label for="username">Identificador de Usuario</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    placeholder="Ingrese su identificador"
+                    required
+                    autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Clave de Acceso</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    placeholder="Ingrese su clave"
+                    required>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Iniciar Sesión Segura
+            </button>
+        </form>
+
+        <div class="security-badge">
+            Conexión segura cifrada SSL/TLS
+        </div>
+
+        <div class="footer">
+            Sistema de Gestión v2.1.4<br>
+            © 2025 - Departamento de Análisis de Variables
+        </div>
+    </div>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Credenciales correctas
+            if (username === 'La variable C' && password === 'CoraimaSilva') {
+                // Animación de éxito
+                document.querySelector('.submit-btn').textContent = '✓ Acceso Autorizado';
+                document.querySelector('.submit-btn').style.background = 'linear-gradient(135deg, #48bb78, #38a169)';
+                
+                // Guardar sesión
+                sessionStorage.setItem('authenticated', 'true');
+                
+                // Redirigir después de un breve delay
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 800);
+                
+                return false;
+            } else {
+                // Mostrar error
+                errorMessage.classList.remove('show');
+                void errorMessage.offsetWidth; // Trigger reflow
+                errorMessage.classList.add('show');
+                
+                // Limpiar campos
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+                
+                return false;
+            }
+        }
+
+        // Limpiar mensaje de error al escribir
+        document.getElementById('username').addEventListener('input', () => {
+            document.getElementById('errorMessage').classList.remove('show');
+        });
+        
+        document.getElementById('password').addEventListener('input', () => {
+            document.getElementById('errorMessage').classList.remove('show');
+        });
+    </script>
+</body>
+</html>

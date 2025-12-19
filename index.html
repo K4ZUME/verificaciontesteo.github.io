@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Variable C</title>
+    <style>
+        :root {
+            --palo-rosa: #d4a5a5;
+            --rosa-suave: #e8c4c4;
+            --celeste: #a8d8e6;
+            --beige: #f5e6d3;
+            --marron: #8b7355;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(180deg, #87ceeb 0%, #b8e6f5 20%, #d4e8f0 40%, #f5e6d3 70%, #e8c4c4 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Cielo con nubes */
+        .sky {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 100px;
+            animation: float-cloud 80s linear infinite;
+            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Jardín de flores en el fondo */
+        .garden {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(180deg, transparent, rgba(139, 115, 85, 0.15));
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .ground-flower {
+            position: absolute;
+            bottom: 20px;
+            font-size: 2.5em;
+            animation: sway 4s ease-in-out infinite;
+        }
+
+        /* Pétalos y hojas cayendo */
+        .falling-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .petal, .leaf {
+            position: absolute;
+            animation: fall 20s linear infinite;
+        }
+
+        .petal {
+            width: 12px;
+            height: 12px;
+            background: var(--palo-rosa);
+            border-radius: 50% 0 50% 0;
+            opacity: 0.5;
+        }
+
+        .leaf {
+            font-size: 1.5em;
+            opacity: 0.4;
+        }
+
+        /* Mariposas */
+        .butterfly {
+            position: fixed;
+            font-size: 2em;
+            animation: fly 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        .intro-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .content-wrapper {
+            max-width: 850px;
+            width: 100%;
+            animation: fadeInUp 2s ease-out;
+        }
+
+        .variable-title {
+            font-size: 4em;
+            text-align: center;
+            margin-bottom: 60px;
+            letter-spacing: 12px;
+            font-weight: 300;
+            background: linear-gradient(135deg, var(--palo-rosa), var(--celeste));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(212, 165, 165, 0.3));
+        }
+
+        .intro-text {
+            font-size: 1.15em;
+            line-height: 2;
+            text-align: justify;
+            color: var(--marron);
+            margin-bottom: 30px;
+            text-indent: 45px;
+            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.75);
+            padding: 24px 32px;
+            border-radius: 16px;
+            border-left: 4px solid var(--palo-rosa);
+            box-shadow: 0 4px 20px rgba(139, 115, 85, 0.15);
+            animation: slideIn 1.2s ease-out backwards;
+        }
+
+        .intro-text:nth-child(2) { animation-delay: 0.3s; }
+        .intro-text:nth-child(3) { animation-delay: 0.5s; }
+        .intro-text:nth-child(4) { animation-delay: 0.7s; }
+        .intro-text:nth-child(5) { animation-delay: 0.9s; }
+        .intro-text:nth-child(6) { animation-delay: 1.1s; }
+
+        .highlight {
+            color: var(--palo-rosa);
+            font-weight: 600;
+            font-style: italic;
+            font-size: 1.05em;
+        }
+
+        .continue-btn {
+            display: block;
+            width: fit-content;
+            margin: 70px auto 0;
+            padding: 18px 50px;
+            background: rgba(212, 165, 165, 0.3);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--palo-rosa);
+            border-radius: 50px;
+            color: var(--marron);
+            font-size: 1.15em;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            box-shadow: 0 4px 15px rgba(212, 165, 165, 0.3);
+        }
+
+        .continue-btn:hover {
+            background: rgba(168, 216, 230, 0.4);
+            border-color: var(--celeste);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(168, 216, 230, 0.4);
+        }
+
+        @keyframes float-cloud {
+            from { left: -200px; }
+            to { left: 110%; }
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-8deg); }
+            50% { transform: rotate(8deg); }
+        }
+
+        @keyframes fall {
+            0% { top: -10%; opacity: 0.7; transform: rotate(0deg); }
+            100% { top: 110%; opacity: 0; transform: rotate(720deg); }
+        }
+
+        @keyframes fly {
+            0%, 100% { 
+                left: -10%; 
+                top: 20%; 
+                transform: scale(1);
+            }
+            50% { 
+                left: 110%; 
+                top: 60%; 
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @media (max-width: 768px) {
+            .variable-title { font-size: 2.5em; letter-spacing: 6px; }
+            .intro-text { font-size: 1.05em; padding: 20px 25px; text-indent: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cielo con nubes -->
+    <div class="sky" id="sky"></div>
+
+    <!-- Jardín de flores -->
+    <div class="garden" id="garden"></div>
+
+    <!-- Elementos cayendo -->
+    <div class="falling-elements" id="fallingElements"></div>
+
+    <!-- Mariposas -->
+    <div class="butterfly" style="animation-delay: 0s;">🦋</div>
+    <div class="butterfly" style="animation-delay: 5s; animation-duration: 20s;">🦋</div>
+
+    <div class="intro-container">
+        <div class="content-wrapper">
+            <h1 class="variable-title">LA VARIABLE C</h1>
+
+            <p class="intro-text">
+                Nos obsesionamos con encontrar constantes porque, en el fondo, le tenemos pánico a la incertidumbre. En mi carrera, y en mi propia existencia, me entrené para minimizar el margen de error, para habitar sistemas predecibles. Vivía resolviendo ecuaciones lineales en una realidad monocromática, convencido de que el orden era lo más cercano que existía a la felicidad.
+            </p>
+
+            <p class="intro-text">
+                Pero la vida, con su infinita ironía, introdujo un factor que no obedecía a mi modelo matemático: <span class="highlight">La Variable C</span>.
+            </p>
+
+            <p class="intro-text">
+                Una incógnita que no estaba en mis cálculos y que, sin embargo, se convirtió en el resultado de todo. Y aquí está la paradoja más grande: esta variable no llegó para desestabilizar mi sistema, sino para darle un propósito que la lógica no podía ver.
+            </p>
+
+            <p class="intro-text">
+                Descubrí que <span class="highlight">"C"</span> es mucho más que una letra: C es la <span class="highlight">Calma</span> que paradójicamente aceleró mis latidos. C es el <span class="highlight">Color</span> que refractó la luz en mis días grises. C es el <span class="highlight">Corazón</span> que convirtió mi mecánica en vida. Y, inevitablemente, C es <span class="highlight">Coraima</span>.
+            </p>
+
+            <p class="intro-text">
+                Este álbum es la demostración empírica de que hay verdades que escapan a la razón. Porque mientras la ciencia nos explica cómo funciona el universo, tú llegaste para explicarme por qué vale la pena estar en él.
+            </p>
+
+            <a href="menu.html" class="continue-btn">Abrir Álbum 🌸</a>
+        </div>
+    </div>
+
+    <script>
+        if (!sessionStorage.getItem('authenticated')) {
+            window.location.href = 'login.html';
+        }
+
+        // Crear nubes
+        const sky = document.getElementById('sky');
+        for (let i = 0; i < 4; i++) {
+            const cloud = document.createElement('div');
+            cloud.className = 'cloud';
+            cloud.style.width = (Math.random() * 80 + 80) + 'px';
+            cloud.style.height = (Math.random() * 30 + 30) + 'px';
+            cloud.style.top = (Math.random() * 60) + '%';
+            cloud.style.left = (Math.random() * -200) + 'px';
+            cloud.style.animationDuration = (Math.random() * 40 + 60) + 's';
+            cloud.style.animationDelay = (i * 15) + 's';
+            sky.appendChild(cloud);
+        }
+
+        // Crear flores en el jardín
+        const garden = document.getElementById('garden');
+        const flowers = ['🌸', '�', '🌼', '🌷', '🌹', '🌻'];
+        for (let i = 0; i < 12; i++) {
+            const flower = document.createElement('div');
+            flower.className = 'ground-flower';
+            flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+            flower.style.left = (i * 8 + Math.random() * 5) + '%';
+            flower.style.animationDelay = (Math.random() * 2) + 's';
+            flower.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            garden.appendChild(flower);
+        }
+
+        // Crear pétalos y hojas cayendo
+        const fallingContainer = document.getElementById('fallingElements');
+        function createFallingElement() {
+            const element = document.createElement('div');
+            const isLeaf = Math.random() > 0.7;
+            
+            if (isLeaf) {
+                element.className = 'leaf';
+                element.textContent = '🍃';
+            } else {
+                element.className = 'petal';
+            }
+            
+            element.style.left = Math.random() * 100 + '%';
+            element.style.animationDuration = (Math.random() * 10 + 15) + 's';
+            element.style.animationDelay = Math.random() * 5 + 's';
+            fallingContainer.appendChild(element);
+            
+            setTimeout(() => element.remove(), 25000);
+        }
+
+        for (let i = 0; i < 20; i++) {
+            setTimeout(createFallingElement, i * 800);
+        }
+
+        setInterval(createFallingElement, 3000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Reproductor</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        :root {
+            --palo-rosa: #d4a5a5;
+            --celeste: #a8d8e6;
+            --beige: #f5e6d3;
+            --marron: #8b7355;
+        }
+
+        body {
+            background: linear-gradient(180deg, #87ceeb 0%, #b8e6f5 20%, #d4e8f0 40%, #f5e6d3 70%, #e8c4c4 100%);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Decoración de fondo */
+        .floral-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-petal {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--palo-rosa);
+            border-radius: 50% 0 50% 0;
+            opacity: 0.3;
+            animation: drift 25s linear infinite;
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, -100vh) rotate(0deg); }
+            100% { transform: translate(50vw, 100vh) rotate(720deg); }
+        }
+
+        .player-container {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .player-header {
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .player-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .player-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            max-width: 1400px;
+            width: 100%;
+            align-items: start;
+        }
+
+        .vinyl-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .vinyl {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            background-size: cover;
+            background-position: 72% center;
+            overflow: hidden;
+        }
+
+        .vinyl::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            filter: brightness(0.7);
+            border-radius: 50%;
+        }
+
+        .vinyl-rings {
+            position: absolute;
+            inset: 15%;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1;
+        }
+
+        .vinyl-center {
+            position: absolute;
+            inset: 38%;
+            border-radius: 50%;
+            background: #1a1a2e;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .vinyl-pulse {
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            border: 2px solid rgba(236, 72, 153, 0.3);
+            animation: pulse-ring 2s ease-out infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.95);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.05);
+                opacity: 0;
+            }
+        }
+
+        .track-info {
+            text-align: center;
+            max-width: 500px;
+        }
+
+        .track-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(236, 72, 153, 0.9);
+            margin-bottom: 8px;
+            display: none;
+        }
+
+        .track-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .track-artist {
+            font-size: 1.2em;
+            opacity: 0.6;
+            margin-bottom: 16px;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            width: 100%;
+            max-width: 500px;
+            align-items: center;
+        }
+
+        .time-row {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 0.9em;
+            font-family: monospace;
+            opacity: 0.6;
+        }
+
+        .progress-container {
+            width: 100%;
+        }
+
+        .time {
+            font-size: 0.9em;
+            font-family: monospace;
+            opacity: 0.6;
+            min-width: 50px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            touch-action: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ec4899, #f472b6);
+            border-radius: 3px;
+            position: relative;
+            transition: width 0.1s linear;
+            pointer-events: none;
+        }
+
+        .progress-thumb {
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
+            transition: transform 0.2s ease;
+            pointer-events: none;
+        }
+
+        .progress-bar:hover .progress-thumb {
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        .progress-bar:active .progress-thumb {
+            transform: translateY(-50%) scale(1.3);
+        }
+
+        .buttons-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .control-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 20px;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .control-btn.active {
+            background: rgba(236, 72, 153, 0.3);
+            color: #ec4899;
+        }
+
+        .play-btn::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 16px solid currentColor;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            margin-left: 4px;
+        }
+
+        .play-btn.playing::before {
+            content: '';
+            border: none;
+            width: 16px;
+            height: 24px;
+            margin: 0;
+            background: 
+                linear-gradient(currentColor, currentColor) 0 0 / 5px 24px no-repeat,
+                linear-gradient(currentColor, currentColor) 11px 0 / 5px 24px no-repeat;
+        }
+
+        .prev-btn::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-right: 12px solid currentColor;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+
+        .next-btn::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 12px solid currentColor;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+
+        .loop-btn::before {
+            content: '\21BB';
+            font-size: 24px;
+            font-weight: normal;
+        }
+
+        .play-btn {
+            width: 80px;
+            height: 80px;
+            background: white;
+            color: #1a1a2e;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            font-size: 32px;
+        }
+
+        .play-btn:hover {
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .content-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .dedication-card, .lyrics-card {
+            padding: 32px;
+            border-radius: 24px;
+        }
+
+        .card-header {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(236, 72, 153, 0.9);
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: bold;
+        }
+
+        .dedication-text {
+            font-size: 1.2em;
+            line-height: 1.8;
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        .memories-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85em;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .memory-card:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .like-btn {
+            transition: all 0.3s ease;
+        }
+
+        .like-btn.liked {
+            color: #ec4899;
+            transform: scale(1.2);
+        }
+
+        .keyboard-hint {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            opacity: 0.4;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1024px) {
+            .player-layout {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            
+            .vinyl {
+                width: 280px;
+                height: 280px;
+            }
+
+            .track-title {
+                font-size: 2em;
+            }
+
+            .keyboard-hint {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .player-header {
+                padding: 16px;
+            }
+
+            .vinyl {
+                width: 240px;
+                height: 240px;
+            }
+
+            .track-title {
+                font-size: 1.5em;
+            }
+
+            .track-artist {
+                font-size: 1em;
+            }
+
+            .play-btn {
+                width: 70px;
+                height: 70px;
+            }
+
+            .control-btn {
+                width: 44px;
+                height: 44px;
+            }
+
+            .dedication-card, .lyrics-card {
+                padding: 24px;
+            }
+
+            .dedication-text {
+                font-size: 1em;
+            }
+
+            .btn {
+                padding: 8px 16px;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="bg-gradient-1"></div>
+        <div class="bg-gradient-2"></div>
+        <div class="bg-gradient-3"></div>
+        <div id="stars"></div>
+    </div>
+
+    <div class="player-container view-transition">
+        <!-- Header -->
+        <div class="player-header">
+            <a href="menu.html" class="btn">← Menú</a>
+            <div class="nav-buttons">
+                <button class="btn" onclick="toggleLyrics()" id="lyricsBtn" style="display: none;">
+                    📝 Ver Letras
+                </button>
+                <button class="control-btn like-btn" onclick="toggleLike()" id="likeBtn">
+                    ❤️
+                </button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="player-content">
+            <div class="player-layout">
+                <!-- Vinyl & Controls -->
+                <div class="vinyl-section">
+                    <div class="vinyl" id="vinyl">
+                        <div class="vinyl-pulse" id="pulse1" style="display: none;"></div>
+                        <div class="vinyl-pulse" id="pulse2" style="display: none; animation-delay: 0.5s;"></div>
+                        <div class="vinyl-rings"></div>
+                        <div class="vinyl-rings" style="inset: 20%;"></div>
+                        <div class="vinyl-rings" style="inset: 25%;"></div>
+                        <div class="vinyl-center" id="vinylCenter"></div>
+                    </div>
+
+                    <div class="track-info">
+                        <div class="track-label" id="trackLabel">Capítulo 1</div>
+                        <h1 class="track-title" id="trackTitle">Cargando...</h1>
+                        <p class="track-artist" id="trackArtist">-</p>
+                    </div>
+
+                    <!-- Visualizador -->
+                    <div class="audio-visualizer" id="visualizer"></div>
+
+                    <!-- Controles -->
+                    <div class="controls">
+                        <div class="progress-container">
+                            <div class="time-row">
+                                <span class="time" id="currentTime">0:00</span>
+                                <span class="time" id="duration">0:00</span>
+                            </div>
+                            <div class="progress-bar" id="progressBar" onclick="seek(event)">
+                                <div class="progress-fill" id="progressFill">
+                                    <div class="progress-thumb"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="control-btn play-btn" onclick="togglePlay()" id="playBtn"></button>
+
+                        <div class="buttons-row">
+                            <button class="control-btn prev-btn" onclick="previousTrack()" id="prevBtn" title="Anterior"></button>
+                            <button class="control-btn loop-btn" onclick="toggleLoop()" id="loopBtn" title="Reproducir en bucle"></button>
+                            <button class="control-btn next-btn" onclick="nextTrack()" id="nextBtn" title="Siguiente"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dedication & Lyrics -->
+                <div class="content-section">
+                    <div class="dedication-card glass-panel">
+                        <div class="card-header">⭐ Dedicatoria</div>
+                        <p class="dedication-text" id="dedication">Cargando...</p>
+                        <div class="memories-grid" id="memories"></div>
+                    </div>
+
+                    <div class="lyrics-card glass-panel" id="lyricsCard" style="display: none;">
+                        <div class="card-header">🎤 Letra</div>
+                        <div class="lyrics-container" id="lyricsContainer">
+                            <div style="text-align: center; opacity: 0.5; padding: 40px;">
+                                Disfruta la melodía 🎵
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Decoración de fondo -->
+    <div class="floral-bg" id="petals"></div>
+
+    <!-- Hints -->
+    <div class="keyboard-hint glass-panel">
+        ⌨️ Espacio: Play/Pausa<br>
+        ← →: Anterior/Siguiente<br>
+        ↑ ↓: Volumen
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="audio"></audio>
+
+    <script src="js/tracks.js"></script>
+    <script src="js/player.js"></script>
+    <script>
+        // Crear pétalos flotantes
+        const petalsContainer = document.getElementById('petals');
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'floating-petal';
+            petal.style.left = Math.random() * 100 + '%';
+            petal.style.animationDuration = (Math.random() * 15 + 20) + 's';
+            petal.style.animationDelay = Math.random() * 5 + 's';
+            petalsContainer.appendChild(petal);
+            
+            setTimeout(() => petal.remove(), 30000);
+        }
+
+        for (let i = 0; i < 10; i++) {
+            setTimeout(createPetal, i * 1000);
+        }
+
+        setInterval(createPetal, 3000);
+    </script>
+</body>
+</html>
