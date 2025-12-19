@@ -239,9 +239,24 @@
         }
 
         @media (max-width: 768px) {
-            .menu-header h2 { font-size: 2.5em; }
+            .menu-header h2 { 
+                font-size: 2.5em; 
+                letter-spacing: 4px;
+                padding: 12px 30px;
+            }
             .song-cover { width: 70px; height: 70px; }
             .song-title { font-size: 1.2em; }
+            .songs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .menu-header h2 {
+                font-size: 2em;
+                letter-spacing: 3px;
+                padding: 10px 20px;
+            }
         }
     </style>
 </head>
