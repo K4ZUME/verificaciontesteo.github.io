@@ -87,21 +87,34 @@
         }
 
         .menu-header h2 {
-            font-size: 4.5em;
-            margin-bottom: 16px;
+            font-size: 3.8em;
+            margin-bottom: 20px;
             font-weight: 700;
-            letter-spacing: 8px;
-            background: linear-gradient(135deg, var(--palo-rosa), var(--celeste));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 25px rgba(212, 165, 165, 0.5)) drop-shadow(0 3px 6px rgba(139, 115, 85, 0.3));
+            letter-spacing: 10px;
+            color: #5a4638;
+            text-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.2),
+                0 0 20px rgba(212, 165, 165, 0.6),
+                0 0 35px rgba(168, 216, 230, 0.4);
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
+            padding: 15px 50px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(139, 115, 85, 0.3);
+            backdrop-filter: blur(10px);
+            display: inline-block;
         }
 
         .menu-header p {
-            color: var(--marron);
-            font-size: 1.5em;
-            font-weight: 600;
-            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
+            color: #5a4638;
+            font-size: 1.35em;
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.8), rgba(212, 165, 165, 0.3), rgba(255, 255, 255, 0.8));
+            padding: 10px 30px;
+            border-radius: 30px;
+            display: inline-block;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 10px rgba(139, 115, 85, 0.2);
         }
 
         .songs-grid {
@@ -245,7 +258,6 @@
     <div class="menu-container">
         <div class="menu-header">
             <h2>🌸 Capítulos 🌸</h2>
-            <p>Elige un recuerdo para comenzar...</p>
         </div>
         <div class="songs-grid" id="songsGrid"></div>
     </div>

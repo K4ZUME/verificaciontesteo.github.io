@@ -93,7 +93,7 @@ function loadTrack(id) {
     document.getElementById('trackLabel').textContent = currentTrack.description;
     document.getElementById('trackTitle').textContent = currentTrack.title;
     document.getElementById('trackArtist').textContent = currentTrack.artist;
-    document.getElementById('dedication').textContent = `"${currentTrack.dedication}"`;
+    document.getElementById('dedication').textContent = currentTrack.dedication;
     
     // Aplicar imagen de portada o gradiente al vinilo
     if (currentTrack.coverImage) {
