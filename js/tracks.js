@@ -291,5 +291,46 @@ const tracks = [
             { time: 129, text: "♪" }
         ],
         memories: []
+    },
+    {
+        id: 6,
+        title: "Un siglo o dos",
+        artist: "Dedicatoria Especial",
+        type: "Original",
+        audioUrl: "audio/Un siglo o dos.wav",
+        coverImage: "portada/Un siglo o dos.png",
+        coverGradient: "from-blue-400 via-purple-500 to-pink-500",
+        dedication: "A menudo nos dicen que el amor es un estado de locura transitoria, un error de cálculo que nos hace vulnerables. Pero al encontrarte, reformulé mi hipótesis: quizá la verdadera locura era intentar vivir \"cuerdo\" en un mundo sin color. Tú no llegaste para desordenar mi mente, sino para curar mi corazón. Si amar es de locos, entonces acepto el diagnóstico, porque tú eres la única terapia que funcionó donde la lógica falló.",
+        emoji: "💫",
+        description: "Capítulo 6: Un siglo o dos",
+        lyrics: [
+            { time: 0, text: "♪" },
+            { time: 5, text: "[Verse 1]" },
+            { time: 8, text: "Dicen que amar es de locos" },
+            { time: 12, text: "que es arriesgarse a perder la razón" },
+            { time: 16, text: "Pero te miro y entiendo" },
+            { time: 20, text: "que tú eres la cura de mi corazón." },
+            { time: 24, text: "Ya no me importa el pasado" },
+            { time: 28, text: "ni las heridas que un día dolieron" },
+            { time: 32, text: "Todo valió la pena" },
+            { time: 36, text: "si al final tus ojos me vieron." },
+            { time: 40, text: "" },
+            { time: 41, text: "[Chorus]" },
+            { time: 42, text: "Y ahora que estás aquí" },
+            { time: 46, text: "haz de mi vida tu casa, tu centro" },
+            { time: 50, text: "Que afuera el mundo es ajeno" },
+            { time: 54, text: "pero aquí tienes lo que llevo dentro." },
+            { time: 58, text: "Quédate un siglo o dos" },
+            { time: 62, text: "o quédate solo este instante eterno" },
+            { time: 66, text: "Que si es contigo," },
+            { time: 68, text: "no existe el frío, no existe el invierno." },
+            { time: 72, text: "" },
+            { time: 73, text: "[Outro]" },
+            { time: 74, text: "Quédate aquí..." },
+            { time: 78, text: "donde el tiempo no cuenta." },
+            { time: 82, text: "Solo tú y yo." },
+            { time: 86, text: "♪" }
+        ],
+        memories: []
     }
 ];
