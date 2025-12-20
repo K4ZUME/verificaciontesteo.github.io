@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Álbum - Para Ti</title>
+    <script>
+        // Verificar autenticación inmediatamente
+        if (!sessionStorage.getItem('authenticated')) {
+            window.location.replace('login.html');
+        }
+    </script>
     <style>
         :root {
             --palo-rosa: #d4a5a5;
@@ -279,11 +285,6 @@
 
     <script src="js/tracks.js"></script>
     <script>
-        // Verificar autenticación
-        if (!sessionStorage.getItem('authenticated')) {
-            window.location.href = 'login.html';
-        }
-
         // Crear pétalos flotantes
         const petalsContainer = document.getElementById('petals');
         function createPetal() {

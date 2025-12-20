@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>La Variable C</title>
+    <script>
+        // Verificar autenticación inmediatamente
+        if (!sessionStorage.getItem('authenticated')) {
+            window.location.replace('login.html');
+        }
+    </script>
     <style>
         :root {
             --palo-rosa: #d4a5a5;
@@ -304,10 +310,6 @@
     </div>
 
     <script>
-        if (!sessionStorage.getItem('authenticated')) {
-            window.location.href = 'login.html';
-        }
-
         // Crear nubes
         const sky = document.getElementById('sky');
         for (let i = 0; i < 4; i++) {
