@@ -237,7 +237,7 @@ const tracks = [
     {
         id: 5,
         title: "Te voy a robar el corazón",
-        artist: "Cover - Dedicatoria Especial",
+        artist: "Cover - Salserín",
         type: "Cover",
         audioUrl: "audio/Te voy a robar el corazón.wav",
         coverImage: "portada/Te voy a robar el corazón.png",
