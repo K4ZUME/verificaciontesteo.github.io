@@ -237,8 +237,8 @@ const tracks = [
     {
         id: 5,
         title: "Te voy a robar el corazón",
-        artist: "Dedicatoria Especial",
-        type: "Original",
+        artist: "Cover - Dedicatoria Especial",
+        type: "Cover",
         audioUrl: "audio/Te voy a robar el corazón.wav",
         coverImage: "portada/Te voy a robar el corazón.png",
         coverGradient: "from-red-400 via-pink-500 to-rose-500",
