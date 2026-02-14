@@ -225,8 +225,9 @@
             }
             .player-content {
                 overflow-y: visible;
-                padding-bottom: 24px;
-                padding-top: 8px;
+                padding-bottom: 180px;
+                padding-top: 6px;
+                gap: 18px;
             }
             .vinyl-wrap { width: 220px; height: 220px; }
             .song-card { min-height: 98px; }
@@ -235,8 +236,11 @@
                 height: 46px;
             }
             .song-play-btn i { font-size: 18px; }
-            .lyrics-box { max-height: 35vh; }
-            .dedication-box { max-height: 30vh; }
+            .lyrics-box,
+            .dedication-box {
+                max-height: none;
+                overflow: visible;
+            }
         }
     </style>
 </head>
@@ -264,7 +268,7 @@
             </button>
         </div>
 
-        <div id="player-content" class="flex-1 flex flex-col md:flex-row items-start justify-center gap-8 md:gap-12 px-4 md:px-6 pt-4 md:pt-6 overflow-y-auto pb-32 player-content">
+        <div id="player-content" class="flex-1 flex flex-col md:flex-row items-start justify-center gap-8 md:gap-12 px-4 md:px-6 pt-4 md:pt-6 pb-32 player-content">
             <div class="w-full md:max-w-xl flex flex-col items-center gap-6">
                 <div class="relative w-64 h-64 md:w-96 md:h-96 flex-shrink-0 vinyl-wrap">
                     <div id="player-vinyl" class="vinyl-record w-full h-full rounded-full animate-spin-slow">
