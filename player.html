@@ -3,607 +3,599 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">Reproductor</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Nuestra Historia - Álbum</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        if (!sessionStorage.getItem('authenticated')) {
+            window.location.replace('login.html');
+        }
+
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rose-love': '#e8c4c4',
+                        'blue-dream': '#a8d8e6',
+                        'sand': '#f5e6d3',
+                        'cocoa': '#5a4638',
+                        'glass': 'rgba(255, 255, 255, 0.25)',
+                        'glass-border': 'rgba(255, 255, 255, 0.5)',
+                        'glass-dark': 'rgba(255, 255, 255, 0.55)'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Quicksand"', 'sans-serif']
+                    },
+                    animation: {
+                        'spin-slow': 'spin 8s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-soft': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+
     <style>
         :root {
-            --palo-rosa: #d4a5a5;
-            --celeste: #a8d8e6;
-            --beige: #f5e6d3;
-            --marron: #8b7355;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.5);
         }
 
         body {
-            background: linear-gradient(180deg, #87ceeb 0%, #b8e6f5 20%, #d4e8f0 40%, #f5e6d3 70%, #e8c4c4 100%);
-            position: relative;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #a18cd1, #fbc2eb);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Quicksand', sans-serif;
+            color: #5a4638;
             overflow-x: hidden;
         }
 
-        /* Decoración de fondo */
-        .floral-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .floating-petal {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: var(--palo-rosa);
-            border-radius: 50% 0 50% 0;
-            opacity: 0.3;
-            animation: drift 25s linear infinite;
-        }
-
-        @keyframes drift {
-            0% { transform: translate(0, -100vh) rotate(0deg); }
-            100% { transform: translate(50vw, 100vh) rotate(720deg); }
-        }
-
-        .player-container {
-            position: relative;
-            z-index: 2;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .player-header {
-            padding: 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(10px);
-            background: rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .player-content {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-        }
-
-        .player-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 48px;
-            max-width: 1400px;
-            width: 100%;
-            align-items: start;
-        }
-
-        .vinyl-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .vinyl {
-            width: 350px;
-            height: 350px;
-            border-radius: 50%;
-            position: relative;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            background-size: cover;
-            background-position: 72% center;
+        body.player-open {
             overflow: hidden;
         }
 
-        .vinyl::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: inherit;
-            filter: brightness(0.7);
-            border-radius: 50%;
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        .vinyl-rings {
-            position: absolute;
-            inset: 15%;
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 1;
-        }
-
-        .vinyl-center {
-            position: absolute;
-            inset: 38%;
-            border-radius: 50%;
-            background: #1a1a2e;
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2;
-        }
-
-        .vinyl-pulse {
-            position: absolute;
-            inset: -20px;
-            border-radius: 50%;
-            border: 2px solid rgba(236, 72, 153, 0.3);
-            animation: pulse-ring 2s ease-out infinite;
-        }
-
-        @keyframes pulse-ring {
+        @keyframes petalFall {
             0% {
-                transform: scale(0.95);
-                opacity: 1;
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 0;
             }
+            10% { opacity: .8; }
             100% {
-                transform: scale(1.05);
+                transform: translateY(110vh) translateX(30px) rotate(240deg);
                 opacity: 0;
             }
         }
 
-        .track-info {
-            text-align: center;
-            max-width: 500px;
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.5); border-radius: 10px; }
+
+        .glass-panel {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
         }
 
-        .track-label {
-            font-size: 0.75em;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(236, 72, 153, 0.9);
-            margin-bottom: 8px;
-            display: none;
-        }
-
-        .track-title {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .track-artist {
-            font-size: 1.2em;
-            opacity: 0.6;
-            margin-bottom: 16px;
-        }
-
-        .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-            width: 100%;
-            max-width: 500px;
-            align-items: center;
-        }
-
-        .time-row {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            font-size: 0.9em;
-            font-family: monospace;
-            opacity: 0.6;
-        }
-
-        .progress-container {
-            width: 100%;
-        }
-
-        .time {
-            font-size: 0.9em;
-            font-family: monospace;
-            opacity: 0.6;
-            min-width: 50px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
+        .vinyl-record {
+            background: repeating-radial-gradient(#111 0, #111 2px, #333 3px, #333 4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             position: relative;
-            cursor: pointer;
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            touch-action: none;
+            transition: transform 0.5s ease;
+            animation-play-state: paused;
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ec4899, #f472b6);
-            border-radius: 3px;
-            position: relative;
-            transition: width 0.1s linear;
-            pointer-events: none;
-        }
-
-        .progress-thumb {
+        .vinyl-label {
+            background-size: cover;
+            background-position: center;
             position: absolute;
-            right: -6px;
             top: 50%;
-            transform: translateY(-50%);
-            width: 12px;
-            height: 12px;
-            background: white;
+            left: 50%;
+            transform: translate(-50%, -50%);
             border-radius: 50%;
-            box-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
-            transition: transform 0.2s ease;
+            border: 4px solid rgba(255,255,255,0.3);
+        }
+
+        .petal {
+            position: absolute;
+            background-color: #fff0f5;
+            border-radius: 150% 0 150% 0;
+            opacity: 0.8;
             pointer-events: none;
+            z-index: 0;
+            animation-name: petalFall;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
         }
 
-        .progress-bar:hover .progress-thumb {
-            transform: translateY(-50%) scale(1.2);
+        .view-section {
+            transition: opacity 0.35s ease, transform 0.35s ease;
+            width: 100%;
+            min-height: 100vh;
+            padding-bottom: 110px;
         }
 
-        .progress-bar:active .progress-thumb {
-            transform: translateY(-50%) scale(1.3);
-        }
-
-        .buttons-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .control-btn {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            font-size: 20px;
-        }
-
-        .control-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
-        }
-
-        .control-btn.active {
-            background: rgba(236, 72, 153, 0.3);
-            color: #ec4899;
-        }
-
-        .play-btn::before {
-            content: '';
-            width: 0;
-            height: 0;
-            border-left: 16px solid currentColor;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            margin-left: 4px;
-        }
-
-        .play-btn.playing::before {
-            content: '';
-            border: none;
-            width: 16px;
-            height: 24px;
-            margin: 0;
-            background: 
-                linear-gradient(currentColor, currentColor) 0 0 / 5px 24px no-repeat,
-                linear-gradient(currentColor, currentColor) 11px 0 / 5px 24px no-repeat;
-        }
-
-        .prev-btn::before {
-            content: '';
-            width: 0;
-            height: 0;
-            border-right: 12px solid currentColor;
-            border-top: 8px solid transparent;
-            border-bottom: 8px solid transparent;
-        }
-
-        .next-btn::before {
-            content: '';
-            width: 0;
-            height: 0;
-            border-left: 12px solid currentColor;
-            border-top: 8px solid transparent;
-            border-bottom: 8px solid transparent;
-        }
-
-        .loop-btn::before {
-            content: '\21BB';
-            font-size: 24px;
-            font-weight: normal;
-        }
-
-        .play-btn {
-            width: 80px;
-            height: 80px;
-            background: white;
-            color: #1a1a2e;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-            font-size: 32px;
-        }
-
-        .play-btn:hover {
-            box-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        .content-section {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .dedication-card, .lyrics-card {
-            padding: 32px;
-            border-radius: 24px;
-        }
-
-        .card-header {
-            font-size: 0.75em;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(236, 72, 153, 0.9);
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-weight: bold;
-        }
-
-        .dedication-text {
-            font-size: 1.2em;
-            line-height: 1.8;
-            font-style: italic;
-            opacity: 0.9;
-        }
-
-        .memories-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .memory-card {
-            aspect-ratio: 1;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85em;
-            text-align: center;
-            padding: 12px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .memory-card:hover {
-            transform: scale(1.05) rotate(2deg);
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .like-btn {
-            transition: all 0.3s ease;
-        }
-
-        .like-btn.liked {
-            color: #ec4899;
-            transform: scale(1.2);
-        }
-
-        .keyboard-hint {
+        .hidden-view {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.98);
+            z-index: -1;
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 0.75em;
-            opacity: 0.4;
-            line-height: 1.6;
+            inset: 0;
         }
 
-        @media (max-width: 1024px) {
-            .player-layout {
-                grid-template-columns: 1fr;
-                gap: 32px;
-            }
-            
-            .vinyl {
-                width: 280px;
-                height: 280px;
-            }
-
-            .track-title {
-                font-size: 2em;
-            }
-
-            .keyboard-hint {
-                display: none;
-            }
+        .song-card {
+            min-height: 120px;
         }
 
-        @media (max-width: 640px) {
-            .player-header {
-                padding: 16px;
-            }
+        .song-play-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,.6);
+            color: #fb7185;
+            flex-shrink: 0;
+        }
 
-            .vinyl {
-                width: 240px;
-                height: 240px;
-            }
+        .song-play-btn i {
+            font-size: 22px;
+            line-height: 1;
+            margin-left: 2px;
+        }
 
-            .track-title {
-                font-size: 1.5em;
-            }
+        #player-view {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
 
-            .track-artist {
-                font-size: 1em;
-            }
+        .lyrics-box {
+            max-height: 290px;
+            overflow-y: auto;
+        }
 
-            .play-btn {
-                width: 70px;
-                height: 70px;
-            }
+        .dedication-box {
+            max-height: 36vh;
+            overflow-y: auto;
+        }
 
-            .control-btn {
-                width: 44px;
-                height: 44px;
-            }
+        #dedication-card {
+            scroll-margin-top: 16px;
+        }
 
-            .dedication-card, .lyrics-card {
-                padding: 24px;
-            }
+        .dedication-box::-webkit-scrollbar {
+            width: 6px;
+        }
 
-            .dedication-text {
-                font-size: 1em;
-            }
+        .dedication-box::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+        }
 
-            .btn {
-                padding: 8px 16px;
-                font-size: 0.85em;
+        input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.4);
+            border-radius: 2px;
+        }
+
+        @media (max-width: 767px) {
+            .song-card { min-height: 98px; }
+            .song-play-btn {
+                width: 46px;
+                height: 46px;
             }
+            .song-play-btn i { font-size: 18px; }
+            .lyrics-box { max-height: 220px; }
+            .dedication-box { max-height: 28vh; }
         }
     </style>
 </head>
 <body>
-    <div class="background">
-        <div class="bg-gradient-1"></div>
-        <div class="bg-gradient-2"></div>
-        <div class="bg-gradient-3"></div>
-        <div id="stars"></div>
+    <div id="petals-container" class="fixed inset-0 overflow-hidden pointer-events-none z-0"></div>
+
+    <div id="menu-view" class="view-section relative z-10 px-4 py-8 md:px-8 max-w-7xl mx-auto">
+        <header class="text-center mb-12 animate-float">
+            <span class="inline-block py-1 px-4 rounded-full glass-panel text-sm font-semibold tracking-widest text-cocoa mb-4 uppercase">Para Ti</span>
+            <h1 class="text-4xl md:text-6xl font-serif font-bold text-cocoa drop-shadow-sm mb-2">Nuestra Historia</h1>
+            <p class="text-base md:text-xl text-cocoa/80 font-serif italic">Cada canción, un momento juntos.</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="songs-grid"></div>
     </div>
 
-    <div class="player-container view-transition">
-        <!-- Header -->
-        <div class="player-header">
-            <a href="menu.html" class="btn">← Menú</a>
-            <div class="nav-buttons">
-                <button class="btn" onclick="toggleLyrics()" id="lyricsBtn" style="display: none;">
-                    📝 Ver Letras
-                </button>
-                <button class="control-btn like-btn" onclick="toggleLike()" id="likeBtn">
-                    ❤️
-                </button>
-            </div>
+    <div id="player-view" class="hidden-view glass-panel fixed inset-0 z-50 flex flex-col backdrop-blur-xl bg-white/40">
+        <div class="flex justify-between items-center p-4 md:p-6">
+            <button onclick="toggleView('menu')" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center hover:bg-white/40 transition" title="Minimizar">
+                <i class="ph ph-caret-down text-2xl"></i>
+            </button>
+            <span class="text-[11px] md:text-xs font-bold tracking-widest uppercase opacity-60">Reproduciendo ahora</span>
+            <button onclick="toggleLike()" id="like-btn" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center hover:bg-white/40 transition text-rose-500">
+                <i class="ph-fill ph-heart text-2xl"></i>
+            </button>
         </div>
 
-        <!-- Content -->
-        <div class="player-content">
-            <div class="player-layout">
-                <!-- Vinyl & Controls -->
-                <div class="vinyl-section">
-                    <div class="vinyl" id="vinyl">
-                        <div class="vinyl-pulse" id="pulse1" style="display: none;"></div>
-                        <div class="vinyl-pulse" id="pulse2" style="display: none; animation-delay: 0.5s;"></div>
-                        <div class="vinyl-rings"></div>
-                        <div class="vinyl-rings" style="inset: 20%;"></div>
-                        <div class="vinyl-rings" style="inset: 25%;"></div>
-                        <div class="vinyl-center" id="vinylCenter"></div>
-                    </div>
-
-                    <div class="track-info">
-                        <div class="track-label" id="trackLabel">Capítulo 1</div>
-                        <h1 class="track-title" id="trackTitle">Cargando...</h1>
-                        <p class="track-artist" id="trackArtist">-</p>
-                    </div>
-
-                    <!-- Visualizador -->
-                    <div class="audio-visualizer" id="visualizer"></div>
-
-                    <!-- Controles -->
-                    <div class="controls">
-                        <div class="progress-container">
-                            <div class="time-row">
-                                <span class="time" id="currentTime">0:00</span>
-                                <span class="time" id="duration">0:00</span>
-                            </div>
-                            <div class="progress-bar" id="progressBar" onclick="seek(event)">
-                                <div class="progress-fill" id="progressFill">
-                                    <div class="progress-thumb"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button class="control-btn play-btn" onclick="togglePlay()" id="playBtn"></button>
-
-                        <div class="buttons-row">
-                            <button class="control-btn prev-btn" onclick="previousTrack()" id="prevBtn" title="Anterior"></button>
-                            <button class="control-btn loop-btn" onclick="toggleLoop()" id="loopBtn" title="Reproducir en bucle"></button>
-                            <button class="control-btn next-btn" onclick="nextTrack()" id="nextBtn" title="Siguiente"></button>
-                        </div>
+        <div class="flex-1 flex flex-col md:flex-row items-start justify-center gap-8 md:gap-12 px-4 md:px-6 pt-4 md:pt-6 overflow-y-auto pb-32">
+            <div class="w-full md:max-w-xl flex flex-col items-center gap-6">
+                <div class="relative w-64 h-64 md:w-96 md:h-96 flex-shrink-0">
+                    <div id="player-vinyl" class="vinyl-record w-full h-full rounded-full animate-spin-slow">
+                        <div id="player-cover" class="vinyl-label w-1/2 h-1/2 shadow-inner"></div>
                     </div>
                 </div>
 
-                <!-- Dedication & Lyrics -->
-                <div class="content-section">
-                    <div class="dedication-card glass-panel">
-                        <div class="card-header">⭐ Dedicatoria</div>
-                        <p class="dedication-text" id="dedication">Cargando...</p>
-                        <div class="memories-grid" id="memories"></div>
+                <div class="w-full max-w-md flex flex-col gap-5 text-center">
+                    <div>
+                        <h2 id="player-title" class="text-3xl md:text-5xl font-serif font-bold text-cocoa mb-2">Título Canción</h2>
+                        <p id="player-artist" class="text-lg md:text-xl opacity-75 font-serif italic">Artista / Capítulo</p>
                     </div>
 
-                    <div class="lyrics-card glass-panel" id="lyricsCard" style="display: none;">
-                        <div class="card-header">🎤 Letra</div>
-                        <div class="lyrics-container" id="lyricsContainer">
-                            <div style="text-align: center; opacity: 0.5; padding: 40px;">
-                                Disfruta la melodía 🎵
-                            </div>
+                    <div class="w-full">
+                        <input type="range" id="progress-bar" value="0" min="0" max="100" class="w-full h-1 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-xs font-mono opacity-60 mt-2">
+                            <span id="current-time">0:00</span>
+                            <span id="duration-time">0:00</span>
                         </div>
                     </div>
+
+                    <div class="flex items-center justify-center gap-6">
+                        <button onclick="playPrev()" class="text-3xl hover:scale-110 transition opacity-70 hover:opacity-100"><i class="ph-fill ph-skip-back"></i></button>
+
+                        <button id="play-pause-btn" onclick="togglePlay()" class="w-20 h-20 bg-gradient-to-tr from-rose-400 to-rose-300 rounded-full shadow-lg flex items-center justify-center text-white text-4xl hover:shadow-xl hover:scale-105 transition transform">
+                            <i class="ph-fill ph-play ml-1"></i>
+                        </button>
+
+                        <button onclick="playNext()" class="text-3xl hover:scale-110 transition opacity-70 hover:opacity-100"><i class="ph-fill ph-skip-forward"></i></button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="w-full md:max-w-lg flex flex-col gap-4">
+                <div class="flex items-center justify-center md:justify-start gap-3">
+                    <button id="dedication-nav" onclick="scrollToDedication()" class="glass-panel px-4 py-2 rounded-full text-xs font-semibold">⭐ Dedicatoria</button>
+                    <button id="lyrics-toggle" onclick="toggleLyrics()" class="glass-panel px-4 py-2 rounded-full text-xs font-semibold">🎵 Ocultar Letras</button>
+                </div>
+                <div id="dedication-card" class="glass-panel dedication-box p-5 rounded-2xl relative group">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-rose-400"></div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-rose-500 mb-2">Dedicatoria</h3>
+                    <p id="player-dedication" class="text-sm md:text-base leading-relaxed italic opacity-90">Selecciona una canción para ver el mensaje especial...</p>
+                </div>
+
+                <div id="lyrics-card" class="glass-panel p-5 rounded-2xl">
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-rose-500 mb-2">Letra</h3>
+                    <div id="lyrics-container" class="lyrics-box text-sm md:text-base leading-relaxed italic opacity-90"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Decoración de fondo -->
-    <div class="floral-bg" id="petals"></div>
-
-    <!-- Hints -->
-    <div class="keyboard-hint glass-panel">
-        ⌨️ Espacio: Play/Pausa<br>
-        ← →: Anterior/Siguiente<br>
-        ↑ ↓: Volumen
+    <div id="mini-player" onclick="toggleView('player')" class="fixed bottom-3 md:bottom-4 left-3 right-3 md:left-4 md:right-4 glass-panel rounded-2xl p-3 flex items-center gap-3 md:gap-4 shadow-2xl cursor-pointer transform translate-y-32 transition-transform duration-500 z-40 border border-white/60">
+        <div id="mini-cover" class="w-11 h-11 md:w-12 md:h-12 rounded-full bg-cover bg-center border-2 border-white animate-spin-slow"></div>
+        <div class="flex-1 min-w-0">
+            <h4 id="mini-title" class="font-bold text-cocoa truncate text-sm">Selecciona una canción</h4>
+            <p id="mini-artist" class="text-xs opacity-70 truncate">Nuestra Historia</p>
+        </div>
+        <button onclick="event.stopPropagation(); togglePlay()" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/60 hover:bg-white text-cocoa transition">
+            <i id="mini-play-icon" class="ph-fill ph-play text-lg"></i>
+        </button>
     </div>
 
-    <!-- Audio Element -->
-    <audio id="audio"></audio>
+    <audio id="audio-element"></audio>
 
     <script src="js/tracks.js"></script>
-    <script src="js/player.js"></script>
     <script>
-        // Crear pétalos flotantes
-        const petalsContainer = document.getElementById('petals');
-        function createPetal() {
-            const petal = document.createElement('div');
-            petal.className = 'floating-petal';
-            petal.style.left = Math.random() * 100 + '%';
-            petal.style.animationDuration = (Math.random() * 15 + 20) + 's';
-            petal.style.animationDelay = Math.random() * 5 + 's';
-            petalsContainer.appendChild(petal);
-            
-            setTimeout(() => petal.remove(), 30000);
+        let currentTrackIndex = 0;
+        let isPlaying = false;
+        let lyricsVisible = true;
+
+        const audio = document.getElementById('audio-element');
+        const songsGrid = document.getElementById('songs-grid');
+        const playerView = document.getElementById('player-view');
+        const miniPlayer = document.getElementById('mini-player');
+        const playerTitle = document.getElementById('player-title');
+        const playerArtist = document.getElementById('player-artist');
+        const playerCover = document.getElementById('player-cover');
+        const playerVinyl = document.getElementById('player-vinyl');
+        const playerDedication = document.getElementById('player-dedication');
+        const progressBar = document.getElementById('progress-bar');
+        const currentTimeEl = document.getElementById('current-time');
+        const durationTimeEl = document.getElementById('duration-time');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const lyricsCard = document.getElementById('lyrics-card');
+        const lyricsContainer = document.getElementById('lyrics-container');
+        const lyricsToggle = document.getElementById('lyrics-toggle');
+        const dedicationCard = document.getElementById('dedication-card');
+        const likeBtn = document.getElementById('like-btn');
+
+        function init() {
+            renderSongs();
+            setupAudioListeners();
+            setupPetals();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = parseInt(urlParams.get('id'));
+            const index = tracks.findIndex(t => t.id === id);
+            if (index >= 0) {
+                loadTrack(index, false);
+                toggleView('player');
+            }
         }
 
-        for (let i = 0; i < 10; i++) {
-            setTimeout(createPetal, i * 1000);
+        function renderSongs() {
+            songsGrid.innerHTML = tracks.map((track, index) => {
+                const cover = track.coverImage || '';
+                const title = track.title || 'Sin título';
+                const artist = track.artist || '-';
+                const chapter = track.description || `Capítulo ${track.id}`;
+
+                return `
+                <button type="button" onclick="openTrack(${index})" class="song-card group glass-panel p-4 rounded-2xl cursor-pointer hover:bg-white/40 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl flex items-center gap-4 w-full text-left">
+                    <div class="w-20 h-20 rounded-xl flex-shrink-0 shadow-md overflow-hidden bg-gradient-to-br from-rose-300 to-pink-400">
+                        ${cover ? `<img src="${cover}" alt="${title}" class="w-full h-full object-cover">` : ''}
+                    </div>
+
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-bold text-rose-500 tracking-[0.2em] uppercase mb-1">${chapter}</p>
+                        <h3 class="text-xl font-serif font-bold text-cocoa truncate">${title}</h3>
+                        <p class="text-sm text-cocoa/70 truncate">${artist}</p>
+                    </div>
+
+                    <span class="song-play-btn group-hover:bg-white/80 transition">
+                        <i class="ph-fill ph-play"></i>
+                    </span>
+                </button>
+                `;
+            }).join('');
         }
 
-        setInterval(createPetal, 3000);
+        function openTrack(index) {
+            loadTrack(index, true);
+            toggleView('player');
+        }
+
+        function loadTrack(index, autoPlay = true) {
+            currentTrackIndex = index;
+            const track = tracks[index];
+
+            audio.src = track.audioUrl || '';
+            audio.load();
+
+            playerTitle.innerText = track.title || 'Sin título';
+            playerArtist.innerText = track.artist || '-';
+            playerDedication.innerText = track.dedication || 'Sin dedicatoria';
+
+            if (track.coverImage) {
+                playerCover.style.background = `url('${track.coverImage}') center/cover`;
+                document.getElementById('mini-cover').style.backgroundImage = `url('${track.coverImage}')`;
+            } else {
+                playerCover.style.background = 'linear-gradient(135deg,#f472b6,#fb7185)';
+                document.getElementById('mini-cover').style.backgroundImage = 'none';
+                document.getElementById('mini-cover').style.background = 'linear-gradient(135deg,#f472b6,#fb7185)';
+            }
+
+            document.getElementById('mini-title').innerText = track.title || 'Sin título';
+            document.getElementById('mini-artist').innerText = track.artist || '-';
+            miniPlayer.classList.remove('translate-y-32');
+
+            renderLyrics(track.lyrics || []);
+            lyricsVisible = true;
+            lyricsCard.style.display = 'block';
+            lyricsToggle.innerText = '🎵 Ocultar Letras';
+
+            const likes = getLikes();
+            likeBtn.classList.toggle('text-rose-600', likes.includes(track.id));
+
+            window.history.replaceState({}, '', `player.html?id=${track.id}`);
+
+            if (autoPlay && track.audioUrl) {
+                playTrack();
+            }
+        }
+
+        function renderLyrics(lyrics) {
+            if (!lyrics || lyrics.length === 0) {
+                lyricsContainer.innerHTML = '<p class="opacity-70">No hay letra disponible para esta canción.</p>';
+                return;
+            }
+
+            let html = '';
+            let sectionOpen = false;
+
+            lyrics.forEach(line => {
+                const text = (line.text || '').trim();
+                if (!text || text === '♪') return;
+
+                const section = text.match(/^\[(.*)\]$/);
+                if (section) {
+                    if (sectionOpen) html += '</div>';
+                    html += `<div class="mb-5"><p class="text-xs uppercase tracking-[0.2em] text-rose-500 font-bold mb-2">${section[1]}</p>`;
+                    sectionOpen = true;
+                } else {
+                    if (!sectionOpen) {
+                        html += '<div class="mb-5">';
+                        sectionOpen = true;
+                    }
+                    html += `<p class="mb-1">${text}</p>`;
+                }
+            });
+
+            if (sectionOpen) html += '</div>';
+            lyricsContainer.innerHTML = html || '<p class="opacity-70">No hay letra disponible para esta canción.</p>';
+        }
+
+        function togglePlay() {
+            if (!audio.src) return;
+            if (audio.paused) {
+                playTrack();
+            } else {
+                pauseTrack();
+            }
+        }
+
+        function playTrack() {
+            audio.play().then(() => {
+                isPlaying = true;
+                updatePlayIcons(true);
+                playerVinyl.style.animationPlayState = 'running';
+                document.getElementById('mini-cover').style.animationPlayState = 'running';
+            }).catch(() => {});
+        }
+
+        function pauseTrack() {
+            audio.pause();
+            isPlaying = false;
+            updatePlayIcons(false);
+            playerVinyl.style.animationPlayState = 'paused';
+            document.getElementById('mini-cover').style.animationPlayState = 'paused';
+        }
+
+        function updatePlayIcons(playing) {
+            const iconClass = playing ? 'ph-pause' : 'ph-play';
+            playPauseBtn.innerHTML = `<i class="ph-fill ${iconClass} ${playing ? '' : 'ml-1'}"></i>`;
+            document.getElementById('mini-play-icon').className = `ph-fill ${iconClass} text-lg`;
+        }
+
+        function playNext() {
+            let nextIndex = currentTrackIndex + 1;
+            if (nextIndex >= tracks.length) nextIndex = 0;
+            loadTrack(nextIndex, isPlaying);
+        }
+
+        function playPrev() {
+            let prevIndex = currentTrackIndex - 1;
+            if (prevIndex < 0) prevIndex = tracks.length - 1;
+            loadTrack(prevIndex, isPlaying);
+        }
+
+        function setupAudioListeners() {
+            audio.addEventListener('timeupdate', () => {
+                const percent = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = percent || 0;
+                currentTimeEl.innerText = formatTime(audio.currentTime);
+                durationTimeEl.innerText = formatTime(audio.duration || 0);
+            });
+
+            progressBar.addEventListener('input', (e) => {
+                if (!audio.duration) return;
+                const seekTime = (audio.duration / 100) * e.target.value;
+                audio.currentTime = seekTime;
+            });
+
+            audio.addEventListener('ended', playNext);
+        }
+
+        function formatTime(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60);
+            return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+
+        function toggleView(view) {
+            if (view === 'player') {
+                playerView.classList.remove('hidden-view');
+                document.body.classList.add('player-open');
+                playerView.animate(
+                    [{ transform: 'translateY(100%)', opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }],
+                    { duration: 320, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' }
+                );
+            } else {
+                const animation = playerView.animate(
+                    [{ transform: 'translateY(0)', opacity: 1 }, { transform: 'translateY(100%)', opacity: 0 }],
+                    { duration: 260, easing: 'ease-in', fill: 'forwards' }
+                );
+
+                animation.onfinish = () => {
+                    playerView.classList.add('hidden-view');
+                    document.body.classList.remove('player-open');
+                };
+            }
+        }
+
+        function toggleLyrics() {
+            lyricsVisible = !lyricsVisible;
+            lyricsCard.style.display = lyricsVisible ? 'block' : 'none';
+            lyricsToggle.innerText = lyricsVisible ? '🎵 Ocultar Letras' : '📝 Ver Letras';
+        }
+
+        function scrollToDedication() {
+            dedicationCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function getLikes() {
+            return JSON.parse(localStorage.getItem('likedTracks') || '[]');
+        }
+
+        function toggleLike() {
+            const likes = getLikes();
+            const trackId = tracks[currentTrackIndex]?.id;
+            if (!trackId) return;
+
+            const exists = likes.indexOf(trackId);
+            if (exists >= 0) {
+                likes.splice(exists, 1);
+            } else {
+                likes.push(trackId);
+            }
+
+            localStorage.setItem('likedTracks', JSON.stringify(likes));
+            likeBtn.classList.toggle('text-rose-600', likes.includes(trackId));
+        }
+
+        function setupPetals() {
+            const container = document.getElementById('petals-container');
+            for (let i = 0; i < 16; i++) {
+                const petal = document.createElement('div');
+                petal.classList.add('petal');
+                const size = Math.random() * 10 + 5;
+                petal.style.width = `${size}px`;
+                petal.style.height = `${size}px`;
+                petal.style.left = `${Math.random() * 100}%`;
+                petal.style.animationDuration = `${Math.random() * 8 + 10}s`;
+                petal.style.animationDelay = `${Math.random() * 8}s`;
+                container.appendChild(petal);
+            }
+        }
+
+        init();
     </script>
 </body>
 </html>

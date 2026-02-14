@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Variable C</title>
+    <title>La Variable E</title>
     <script>
         // Verificar autenticación inmediatamente
         if (!sessionStorage.getItem('authenticated')) {
@@ -19,7 +20,11 @@
             --marron: #8b7355;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Georgia', serif;
@@ -78,7 +83,8 @@
             z-index: 3;
         }
 
-        .petal, .leaf {
+        .petal,
+        .leaf {
             position: absolute;
             animation: fall 20s linear infinite;
         }
@@ -128,7 +134,7 @@
             letter-spacing: 14px;
             font-weight: 700;
             color: #5a4638;
-            text-shadow: 
+            text-shadow:
                 0 2px 4px rgba(0, 0, 0, 0.2),
                 0 0 20px rgba(212, 165, 165, 0.6),
                 0 0 40px rgba(168, 216, 230, 0.4);
@@ -156,11 +162,29 @@
             animation: slideIn 1.2s ease-out backwards;
         }
 
-        .intro-text:nth-child(2) { animation-delay: 0.3s; }
-        .intro-text:nth-child(3) { animation-delay: 0.5s; }
-        .intro-text:nth-child(4) { animation-delay: 0.7s; }
-        .intro-text:nth-child(5) { animation-delay: 0.9s; }
-        .intro-text:nth-child(6) { animation-delay: 1.1s; }
+        .intro-text:nth-of-type(1) {
+            animation-delay: 0.3s;
+        }
+
+        .intro-text:nth-of-type(2) {
+            animation-delay: 0.5s;
+        }
+
+        .intro-text:nth-of-type(3) {
+            animation-delay: 0.7s;
+        }
+
+        .intro-text:nth-of-type(4) {
+            animation-delay: 0.9s;
+        }
+
+        .intro-text:nth-of-type(5) {
+            animation-delay: 1.1s;
+        }
+
+        .intro-text:nth-of-type(6) {
+            animation-delay: 1.3s;
+        }
 
         .highlight {
             color: var(--palo-rosa);
@@ -195,53 +219,93 @@
         }
 
         @keyframes float-cloud {
-            from { left: -200px; }
-            to { left: 110%; }
+            from {
+                left: -200px;
+            }
+
+            to {
+                left: 110%;
+            }
         }
 
         @keyframes sway {
-            0%, 100% { transform: rotate(-8deg); }
-            50% { transform: rotate(8deg); }
+
+            0%,
+            100% {
+                transform: rotate(-8deg);
+            }
+
+            50% {
+                transform: rotate(8deg);
+            }
         }
 
         @keyframes fall {
-            0% { top: -10%; opacity: 0.7; transform: rotate(0deg); }
-            100% { top: 110%; opacity: 0; transform: rotate(720deg); }
+            0% {
+                top: -10%;
+                opacity: 0.7;
+                transform: rotate(0deg);
+            }
+
+            100% {
+                top: 110%;
+                opacity: 0;
+                transform: rotate(720deg);
+            }
         }
 
         @keyframes fly {
-            0%, 100% { 
-                left: -10%; 
-                top: 20%; 
+
+            0%,
+            100% {
+                left: -10%;
+                top: 20%;
                 transform: scale(1);
             }
-            50% { 
-                left: 110%; 
-                top: 60%; 
+
+            50% {
+                left: 110%;
+                top: 60%;
                 transform: scale(1.2);
             }
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-30px); }
-            to { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         @media (max-width: 768px) {
-            .variable-title { 
-                font-size: 2.5em; 
+            .variable-title {
+                font-size: 2.5em;
                 letter-spacing: 6px;
                 padding: 15px 25px;
             }
-            .intro-text { 
-                font-size: 1.05em; 
+
+            .intro-text {
+                font-size: 1.05em;
                 padding: 20px 25px;
             }
+
             .intro-container {
                 padding: 60px 20px;
             }
@@ -253,16 +317,19 @@
                 letter-spacing: 4px;
                 padding: 12px 20px;
             }
+
             .intro-text {
                 font-size: 1em;
                 padding: 18px 20px;
             }
+
             .intro-container {
                 padding: 40px 15px;
             }
         }
     </style>
 </head>
+
 <body>
     <!-- Cielo con nubes -->
     <div class="sky" id="sky"></div>
@@ -279,30 +346,43 @@
 
     <div class="intro-container">
         <div class="content-wrapper">
-            <h1 class="variable-title">LA VARIABLE C</h1>
+            <h1 class="variable-title">LA VARIABLE E</h1>
 
             <p class="intro-text">
-                Nos obsesionamos con encontrar constantes porque, en el fondo, le tenemos pánico a la incertidumbre. En mi carrera, y en mi propia existencia, me entrené para habitar siempre en el centro de la Campana de Gauss; justo ahí, en el promedio, donde la estadística dice que la vida es segura, predecible y libre de riesgos.
+                Nos obsesionamos con encontrar constantes porque, en el fondo, le tenemos pánico a la incertidumbre. En
+                mi carrera, y en mi propia existencia, me entrené para habitar siempre en el centro de la Campana de
+                Gauss; justo ahí, en el promedio, donde la estadística dice que la vida es segura, predecible y libre de
+                riesgos.
             </p>
 
             <p class="intro-text">
-                Vivía evitando las desviaciones estándar, resolviendo ecuaciones lineales en una realidad monocromática, convencido de que el orden matemático era lo más cercano que existía a la felicidad.
+                Vivía evitando las desviaciones estándar, resolviendo ecuaciones lineales en una realidad monocromática,
+                convencido de que el orden matemático era lo más cercano que existía a la felicidad.
             </p>
 
             <p class="intro-text">
-                Pero la vida, con su infinita ironía, introdujo un factor que desafió todas mis probabilidades: <span class="highlight">La Variable C</span>.
+                Pero la vida, con su infinita ironía, introdujo un factor que desafió todas mis probabilidades: <span
+                    class="highlight">La Variable E</span>.
             </p>
 
             <p class="intro-text">
-                Tú eres ese dato atípico, esa anomalía hermosa que cae en los extremos de la curva, allí donde sucede lo imposible. Una incógnita que no estaba en mis cálculos y que, sin embargo, se convirtió en el resultado de todo.
+                Tú eres ese dato atípico, esa anomalía hermosa que cae en los extremos de la curva, allí donde sucede lo
+                imposible. Una incógnita que no estaba en mis cálculos y que, sin embargo, se convirtió en el resultado
+                de todo.
             </p>
 
             <p class="intro-text">
-                Descubrí que <span class="highlight">'C'</span> es mucho más que una letra: C es la <span class="highlight">Calma</span> que paradójicamente aceleró mis latidos. C es el <span class="highlight">Color</span> que refractó la luz en mis días grises. C es el <span class="highlight">Corazón</span> que convirtió mi mecánica en vida. Y, inevitablemente, C es <span class="highlight">Coraima</span>.
+                Descubrí que <span class="highlight">"E"</span> es mucho más que una letra: E es el <span
+                    class="highlight">Equilibrio</span> que paradójicamente aceleró mis latidos. E es el <span
+                    class="highlight">Esplendor</span> que refractó la luz en mis días grises. E es la <span
+                    class="highlight">Energía</span> que convirtió mi mecánica en vida. Y, inevitablemente, E es <span
+                    class="highlight">Evelyn</span>.
             </p>
 
             <p class="intro-text">
-                Este álbum es la demostración empírica de que hay verdades que escapan a la estadística. Porque mientras la ciencia nos explica cómo funciona el universo, tú llegaste para explicarme por qué vale la pena estar en él.
+                Este álbum es la demostración empírica de que hay verdades que escapan a la estadística. Porque mientras
+                la ciencia nos explica cómo funciona el universo, tú llegaste para explicarme por qué vale la pena estar
+                en él.
             </p>
 
             <a href="menu.html" class="continue-btn">Abrir Álbum 🌸</a>
@@ -342,19 +422,19 @@
         function createFallingElement() {
             const element = document.createElement('div');
             const isLeaf = Math.random() > 0.7;
-            
+
             if (isLeaf) {
                 element.className = 'leaf';
                 element.textContent = '🍃';
             } else {
                 element.className = 'petal';
             }
-            
+
             element.style.left = Math.random() * 100 + '%';
             element.style.animationDuration = (Math.random() * 10 + 15) + 's';
             element.style.animationDelay = Math.random() * 5 + 's';
             fallingContainer.appendChild(element);
-            
+
             setTimeout(() => element.remove(), 25000);
         }
 
@@ -365,4 +445,5 @@
         setInterval(createFallingElement, 3000);
     </script>
 </body>
+
 </html>

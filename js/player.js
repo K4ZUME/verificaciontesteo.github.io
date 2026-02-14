@@ -11,10 +11,19 @@ let showingLyrics = false;
 let isLooping = false;
 let isDragging = false;
 let wasPlayingBeforeDrag = false;
+let isUnifiedMode = false;
 
 const audio = document.getElementById('audio');
 const vinyl = document.getElementById('vinyl');
 const visualizer = document.getElementById('visualizer');
+const menuView = document.getElementById('menuView');
+const playerView = document.getElementById('playerView');
+const songsGridUnified = document.getElementById('songsGridUnified');
+const miniPlayer = document.getElementById('miniPlayer');
+const miniCover = document.getElementById('miniCover');
+const miniTitle = document.getElementById('miniTitle');
+const miniArtist = document.getElementById('miniArtist');
+const miniBtn = document.getElementById('miniBtn');
 
 let animationId = null;
 
@@ -22,10 +31,24 @@ let animationId = null;
 document.addEventListener('DOMContentLoaded', () => {
     // Obtener ID de la canción de la URL
     const urlParams = new URLSearchParams(window.location.search);
-    currentTrackId = parseInt(urlParams.get('id')) || 1;
+    const requestedTrackId = parseInt(urlParams.get('id'));
+    currentTrackId = requestedTrackId || 1;
+    isUnifiedMode = !!menuView && !!playerView && !!songsGridUnified;
+
+    if (isUnifiedMode) {
+        renderUnifiedSongs();
+    }
     
     // Cargar canción
     loadTrack(currentTrackId);
+
+    if (isUnifiedMode) {
+        if (requestedTrackId) {
+            openPlayerView(false);
+        } else {
+            closePlayerView(false);
+        }
+    }
     
     // Crear estrellas
     createStars();
@@ -53,6 +76,112 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cargar estado guardado
     loadState();
 });
+
+function renderUnifiedSongs() {
+    if (!songsGridUnified) return;
+
+    songsGridUnified.innerHTML = tracks.map(track => {
+        const coverStyle = track.coverImage
+            ? `background-image: url('${track.coverImage}');`
+            : `background: ${getCoverGradient(track.coverGradient)};`;
+
+        return `
+            <button class="song-card" type="button" data-track-id="${track.id}" onclick="openTrackFromMenu(${track.id})">
+                <div class="song-cover" style="${coverStyle}"></div>
+                <div class="song-info">
+                    <div class="song-label">${track.description}</div>
+                    <div class="song-title">${track.title}</div>
+                    <div class="song-artist">${track.artist}</div>
+                </div>
+                <div class="song-play">▶</div>
+            </button>
+        `;
+    }).join('');
+
+    highlightCurrentTrackCard();
+}
+
+function getCoverGradient(gradientClass) {
+    const colors = parseGradient(gradientClass);
+    return `linear-gradient(135deg, ${colors.join(', ')})`;
+}
+
+function highlightCurrentTrackCard() {
+    if (!songsGridUnified) return;
+    songsGridUnified.querySelectorAll('.song-card').forEach(card => {
+        const id = parseInt(card.dataset.trackId);
+        card.classList.toggle('active', id === currentTrackId);
+    });
+}
+
+function openTrackFromMenu(id) {
+    currentTrackId = id;
+    loadTrack(currentTrackId);
+    openPlayerView();
+    showDedication();
+
+    if (currentTrack && currentTrack.audioUrl) {
+        togglePlay(true);
+    }
+}
+
+function openPlayerView(animate = true) {
+    if (!isUnifiedMode || !playerView) return;
+    playerView.classList.remove('hidden-view');
+    document.body.classList.add('player-open');
+
+    if (animate) {
+        playerView.animate([
+            { transform: 'translateY(24px)', opacity: 0 },
+            { transform: 'translateY(0)', opacity: 1 }
+        ], { duration: 320, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+    }
+}
+
+function closePlayerView(animate = true) {
+    if (!isUnifiedMode || !playerView) return;
+
+    if (animate) {
+        const animation = playerView.animate([
+            { transform: 'translateY(0)', opacity: 1 },
+            { transform: 'translateY(24px)', opacity: 0 }
+        ], { duration: 220, easing: 'ease-in' });
+
+        animation.onfinish = () => {
+            playerView.classList.add('hidden-view');
+            document.body.classList.remove('player-open');
+        };
+        return;
+    }
+
+    playerView.classList.add('hidden-view');
+    document.body.classList.remove('player-open');
+}
+
+function showDedication() {
+    const dedicationCard = document.getElementById('dedicationCard');
+    if (!dedicationCard) return;
+
+    openPlayerView(false);
+    dedicationCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showLyricsPanel() {
+    const card = document.getElementById('lyricsCard');
+    const btn = document.getElementById('lyricsBtn');
+    if (!card || !btn) return;
+
+    if (btn.style.display === 'none') return;
+
+    if (!showingLyrics) {
+        showingLyrics = true;
+        card.style.display = 'block';
+        btn.textContent = '🎵 Ocultar Letras';
+    }
+
+    openPlayerView(false);
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
 // Crear estrellas
 function createStars() {
@@ -105,6 +234,9 @@ function loadTrack(id) {
     
     // Cargar audio
     audio.src = currentTrack.audioUrl;
+
+    updateMiniPlayer();
+    highlightCurrentTrackCard();
     
     // Cargar memorias
     loadMemories();
@@ -113,9 +245,13 @@ function loadTrack(id) {
     if (currentTrack.lyrics && currentTrack.lyrics.length > 0) {
         document.getElementById('lyricsBtn').style.display = 'block';
         loadLyrics();
+        showingLyrics = true;
+        document.getElementById('lyricsCard').style.display = 'block';
+        document.getElementById('lyricsBtn').textContent = '🎵 Ocultar Letras';
     } else {
         document.getElementById('lyricsBtn').style.display = 'none';
         document.getElementById('lyricsCard').style.display = 'none';
+        showingLyrics = false;
     }
     
     // Actualizar botones de navegación
@@ -123,6 +259,45 @@ function loadTrack(id) {
     
     // Actualizar botón de like
     updateLikeButton();
+}
+
+function updateMiniPlayer() {
+    if (!isUnifiedMode || !miniPlayer) return;
+
+    miniTitle.textContent = currentTrack?.title || 'Selecciona una canción';
+    miniArtist.textContent = currentTrack?.artist || 'Nuestra Historia';
+
+    if (currentTrack?.coverImage) {
+        miniCover.style.backgroundImage = `url('${currentTrack.coverImage}')`;
+    } else {
+        miniCover.style.backgroundImage = 'none';
+        miniCover.style.background = getCoverGradient(currentTrack?.coverGradient || 'from-pink-500 via-rose-500 to-red-500');
+    }
+
+    if (currentTrack?.id) {
+        miniPlayer.classList.add('visible');
+    }
+}
+
+function updatePlayButtons() {
+    const playBtn = document.getElementById('playBtn');
+    if (isPlaying) {
+        playBtn.classList.add('playing');
+        vinyl.classList.add('vinyl-spinning');
+        document.getElementById('pulse1').style.display = 'block';
+        document.getElementById('pulse2').style.display = 'block';
+        animateVisualizer();
+    } else {
+        playBtn.classList.remove('playing');
+        vinyl.classList.remove('vinyl-spinning');
+        document.getElementById('pulse1').style.display = 'none';
+        document.getElementById('pulse2').style.display = 'none';
+        resetVisualizer();
+    }
+
+    if (miniBtn) {
+        miniBtn.textContent = isPlaying ? '⏸' : '▶';
+    }
 }
 
 // Cargar memorias
@@ -210,26 +385,20 @@ function updateLyrics() {
 
 // Toggle play/pause
 function togglePlay() {
-    const playBtn = document.getElementById('playBtn');
+    if (!currentTrack || !currentTrack.audioUrl) return;
+
     if (audio.paused) {
-        audio.play();
-        isPlaying = true;
-        playBtn.classList.add('playing');
-        vinyl.classList.add('vinyl-spinning');
-        document.getElementById('pulse1').style.display = 'block';
-        document.getElementById('pulse2').style.display = 'block';
-        animateVisualizer();
+        audio.play().then(() => {
+            isPlaying = true;
+            updatePlayButtons();
+            saveState();
+        }).catch(() => {});
     } else {
         audio.pause();
         isPlaying = false;
-        playBtn.classList.remove('playing');
-        vinyl.classList.remove('vinyl-spinning');
-        document.getElementById('pulse1').style.display = 'none';
-        document.getElementById('pulse2').style.display = 'none';
-        resetVisualizer();
+        updatePlayButtons();
+        saveState();
     }
-    
-    saveState();
 }
 
 // Animar visualizador
@@ -352,7 +521,7 @@ function nextTrack() {
     currentTrackId = tracks[nextIndex].id;
     
     // Actualizar URL sin recargar
-    window.history.pushState({}, '', `player.html?id=${currentTrackId}`);
+    window.history.replaceState({}, '', `player.html?id=${currentTrackId}`);
     
     loadTrack(currentTrackId);
     if (isPlaying) {
@@ -369,7 +538,7 @@ function previousTrack() {
     currentTrackId = tracks[prevIndex].id;
     
     // Actualizar URL sin recargar
-    window.history.pushState({}, '', `player.html?id=${currentTrackId}`);
+    window.history.replaceState({}, '', `player.html?id=${currentTrackId}`);
     
     loadTrack(currentTrackId);
     if (isPlaying) {
@@ -381,11 +550,17 @@ function previousTrack() {
 function toggleLyrics() {
     const card = document.getElementById('lyricsCard');
     const btn = document.getElementById('lyricsBtn');
+
+    if (!card || !btn || btn.style.display === 'none') {
+        return;
+    }
+
     showingLyrics = !showingLyrics;
     
     if (showingLyrics) {
         card.style.display = 'block';
         btn.textContent = '🎵 Ocultar Letras';
+        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
         card.style.display = 'none';
         btn.textContent = '📝 Ver Letras';
@@ -532,10 +707,19 @@ function parseGradient(gradient) {
         'pink-500': '#ec4899',
         'rose-500': '#f43f5e',
         'red-500': '#ef4444',
+        'orange-400': '#fb923c',
+        'red-600': '#dc2626',
+        'amber-400': '#fbbf24',
         'blue-400': '#60a5fa',
+        'indigo-400': '#818cf8',
         'indigo-500': '#6366f1',
+        'purple-400': '#c084fc',
         'purple-500': '#a855f7',
         'purple-600': '#9333ea',
+        'gray-400': '#9ca3af',
+        'gray-500': '#6b7280',
+        'gray-600': '#4b5563',
+        'green-400': '#4ade80',
         'emerald-400': '#34d399',
         'teal-500': '#14b8a6',
         'cyan-500': '#06b6d4',
