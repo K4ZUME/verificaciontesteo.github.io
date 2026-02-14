@@ -274,7 +274,7 @@ const tracks = [
         artist: "Cover - Justin Bieber",
         type: "Cover",
         audioUrl: "audio/One less lonely girl.wav",
-        coverImage: "portada/One Less Lonely Girl.png",
+        coverImage: "portada/One less lonely girl.png",
         coverGradient: "from-purple-400 via-pink-500 to-red-500",
         dedication: "A veces pensamos que la soledad es un vacío, cuando en realidad es el espacio que la vida reserva para quien de verdad sabrá llenarlo. Sé que hubo historias antes, \"start overs\" y lágrimas que no debieron caer. Pero elegí cantarte esto para hacerte una promesa tangible: mientras dependa de mí, la soledad será solo un recuerdo borroso. Entre tantas opciones y ruido allá afuera, mis ojos decidieron enfocarse en una sola variable. Tú eres mi elección consciente para que, en este mundo, haya una chica solitaria menos y un amor verdadero más.",
         emoji: "💜",

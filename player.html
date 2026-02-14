@@ -219,8 +219,15 @@
         }
 
         @media (max-width: 767px) {
-            #player-view { overflow-y: auto; }
-            .player-content { overflow-y: visible; padding-bottom: 24px; }
+            #player-view {
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .player-content {
+                overflow-y: visible;
+                padding-bottom: 24px;
+                padding-top: 8px;
+            }
             .vinyl-wrap { width: 220px; height: 220px; }
             .song-card { min-height: 98px; }
             .song-play-btn {
@@ -257,7 +264,7 @@
             </button>
         </div>
 
-        <div class="flex-1 flex flex-col md:flex-row items-start justify-center gap-8 md:gap-12 px-4 md:px-6 pt-4 md:pt-6 overflow-y-auto pb-32 player-content">
+        <div id="player-content" class="flex-1 flex flex-col md:flex-row items-start justify-center gap-8 md:gap-12 px-4 md:px-6 pt-4 md:pt-6 overflow-y-auto pb-32 player-content">
             <div class="w-full md:max-w-xl flex flex-col items-center gap-6">
                 <div class="relative w-64 h-64 md:w-96 md:h-96 flex-shrink-0 vinyl-wrap">
                     <div id="player-vinyl" class="vinyl-record w-full h-full rounded-full animate-spin-slow">
@@ -348,6 +355,7 @@
         const lyricsToggle = document.getElementById('lyrics-toggle');
         const dedicationCard = document.getElementById('dedication-card');
         const likeBtn = document.getElementById('like-btn');
+        const playerContent = document.getElementById('player-content');
 
         function init() {
             renderSongs();
@@ -423,6 +431,8 @@
             lyricsVisible = true;
             lyricsCard.style.display = 'block';
             lyricsToggle.innerText = '🎵 Ocultar Letras';
+            playerContent.scrollTop = 0;
+            playerView.scrollTop = 0;
 
             const likes = getLikes();
             likeBtn.classList.toggle('text-rose-600', likes.includes(track.id));
@@ -536,6 +546,8 @@
             if (view === 'player') {
                 playerView.classList.remove('hidden-view');
                 document.body.classList.add('player-open');
+                playerContent.scrollTop = 0;
+                playerView.scrollTop = 0;
                 playerView.animate(
                     [{ transform: 'translateY(100%)', opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }],
                     { duration: 320, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' }
@@ -557,6 +569,7 @@
             lyricsVisible = !lyricsVisible;
             lyricsCard.style.display = lyricsVisible ? 'block' : 'none';
             lyricsToggle.innerText = lyricsVisible ? '🎵 Ocultar Letras' : '📝 Ver Letras';
+            playerContent.scrollTop = 0;
         }
 
         function scrollToDedication() {
