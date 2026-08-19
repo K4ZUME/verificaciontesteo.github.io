@@ -439,7 +439,7 @@
         }
 
         .chrome-btn {
-            width: 40px; height: 40px; border-radius: 999px;
+            width: 44px; height: 44px; border-radius: 999px;
             display: flex; align-items: center; justify-content: center;
             background: rgba(255,255,255,0.08);
             border: 1px solid rgba(255,255,255,0.18);
@@ -469,6 +469,11 @@
         .play-btn-main:active { transform: scale(0.94); }
 
         .skip-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            min-height: 44px;
             color: var(--cream);
             opacity: 0.7;
             transition: opacity .3s ease, transform .3s ease;
@@ -636,8 +641,8 @@
 
             <div class="w-full md:max-w-lg flex flex-col gap-4">
                 <div class="flex items-center justify-center md:justify-start gap-3">
-                    <button id="dedication-nav" onclick="scrollToDedication()" class="glass-panel px-4 py-2 rounded-full text-xs font-semibold hover:bg-white/60 hover:-translate-y-0.5 transition-all duration-300">⭐ Dedicatoria</button>
-                    <button id="lyrics-toggle" onclick="toggleLyrics()" class="glass-panel px-4 py-2 rounded-full text-xs font-semibold hover:bg-white/60 hover:-translate-y-0.5 transition-all duration-300">🎵 Ocultar Letras</button>
+                    <button id="dedication-nav" onclick="scrollToDedication()" class="glass-panel px-4 py-3 rounded-full text-xs font-semibold hover:bg-white/60 hover:-translate-y-0.5 transition-all duration-300">⭐ Dedicatoria</button>
+                    <button id="lyrics-toggle" onclick="toggleLyrics()" class="glass-panel px-4 py-3 rounded-full text-xs font-semibold hover:bg-white/60 hover:-translate-y-0.5 transition-all duration-300">🎵 Ocultar Letras</button>
                 </div>
                 <div id="dedication-card" class="glass-panel dedication-box p-5 rounded-2xl relative group">
                     <div class="absolute top-0 left-0 w-1 h-full bg-terracotta rounded-l-2xl"></div>
@@ -659,7 +664,7 @@
             <h4 id="mini-title" class="font-serif font-semibold text-ink truncate text-sm">Selecciona una canción</h4>
             <p id="mini-artist" class="text-xs text-ink-soft/80 truncate">Nuestra Historia</p>
         </div>
-        <button onclick="event.stopPropagation(); togglePlay()" class="w-10 h-10 flex items-center justify-center rounded-full bg-terracotta/90 hover:bg-terracotta text-cream transition">
+        <button onclick="event.stopPropagation(); togglePlay()" class="w-11 h-11 flex items-center justify-center rounded-full bg-terracotta/90 hover:bg-terracotta text-cream transition">
             <i id="mini-play-icon" class="ph-fill ph-play text-lg"></i>
         </button>
     </div>
