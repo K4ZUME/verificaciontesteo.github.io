@@ -11,13 +11,21 @@
             window.location.replace('login.html');
         }
     </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,400..600&family=Literata:ital,wght@0,400;0,500;0,600;1,400&family=Caveat:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --palo-rosa: #d4a5a5;
-            --rosa-suave: #e8c4c4;
-            --celeste: #a8d8e6;
-            --beige: #f5e6d3;
-            --marron: #8b7355;
+            --paper: #F4ECD8;
+            --paper-card: #ECE0C2;
+            --cream: #FBF5E6;
+            --ink: #2B2016;
+            --ink-soft: #5C4A34;
+            --brass: #A8792E;
+            --brass-light: #D2A94B;
+            --terracotta: #B1512E;
+            --terracotta-light: #C97148;
         }
 
         * {
@@ -27,89 +35,39 @@
         }
 
         body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(180deg, #87ceeb 0%, #b8e6f5 20%, #d4e8f0 40%, #f5e6d3 70%, #e8c4c4 100%);
+            font-family: 'Literata', serif;
+            color: var(--ink);
+            background-color: var(--paper);
+            background-image:
+                radial-gradient(ellipse 900px 550px at 12% -8%, rgba(255,255,255,0.55), transparent 60%),
+                radial-gradient(ellipse 700px 500px at 100% 8%, rgba(177,81,46,0.08), transparent 55%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.16  0 0 0 0 0.12  0 0 0 0 0.08  0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-attachment: fixed;
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Cielo con nubes */
-        .sky {
+        :focus-visible {
+            outline: 2px solid var(--terracotta);
+            outline-offset: 3px;
+        }
+
+        /* ---------- ambient compass watermark ---------- */
+        .hero-compass {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 50%;
+            top: 50%;
+            left: 50%;
+            width: 720px;
+            height: 720px;
+            transform: translate(-50%, -50%);
+            opacity: 0.06;
             pointer-events: none;
-            z-index: 1;
+            animation: spin 130s linear infinite;
+            z-index: 0;
         }
 
-        .cloud {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 100px;
-            animation: float-cloud 80s linear infinite;
-            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.5);
-        }
-
-        /* Jardín de flores en el fondo */
-        .garden {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(180deg, transparent, rgba(139, 115, 85, 0.15));
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .ground-flower {
-            position: absolute;
-            bottom: 20px;
-            font-size: 2.5em;
-            animation: sway 4s ease-in-out infinite;
-        }
-
-        /* Pétalos y hojas cayendo */
-        .falling-elements {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 3;
-        }
-
-        .petal,
-        .leaf {
-            position: absolute;
-            animation: fall 20s linear infinite;
-        }
-
-        .petal {
-            width: 12px;
-            height: 12px;
-            background: var(--palo-rosa);
-            border-radius: 50% 0 50% 0;
-            opacity: 0.5;
-        }
-
-        .leaf {
-            font-size: 1.5em;
-            opacity: 0.4;
-        }
-
-        /* Mariposas */
-        .butterfly {
-            position: fixed;
-            font-size: 2em;
-            animation: fly 15s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 4;
-        }
+        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
         .intro-container {
             min-height: 100vh;
@@ -122,327 +80,378 @@
         }
 
         .content-wrapper {
-            max-width: 850px;
+            max-width: 780px;
             width: 100%;
-            animation: fadeInUp 2s ease-out;
+            animation: fadeInUp 1.4s ease-out;
+        }
+
+        .field-tag {
+            display: flex;
+            width: fit-content;
+            margin: 0 auto 28px;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 20px;
+            border: 1px dashed var(--brass);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.4);
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
         }
 
         .variable-title {
-            font-size: 4.2em;
+            font-family: 'Fraunces', serif;
+            font-size: 4em;
+            font-weight: 600;
             text-align: center;
-            margin-bottom: 60px;
-            letter-spacing: 14px;
-            font-weight: 700;
-            color: #5a4638;
-            text-shadow:
-                0 2px 4px rgba(0, 0, 0, 0.2),
-                0 0 20px rgba(212, 165, 165, 0.6),
-                0 0 40px rgba(168, 216, 230, 0.4);
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
-            padding: 20px 40px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(139, 115, 85, 0.3);
-            backdrop-filter: blur(10px);
-            display: inline-block;
-            width: 100%;
+            margin-bottom: 56px;
+            letter-spacing: 0.06em;
+            color: var(--ink);
+            position: relative;
+            padding-bottom: 22px;
+        }
+
+        .variable-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--brass), transparent);
         }
 
         .intro-text {
-            font-size: 1.15em;
-            line-height: 2;
+            font-size: 1.1em;
+            line-height: 1.9;
             text-align: justify;
-            color: var(--marron);
-            margin-bottom: 30px;
-            backdrop-filter: blur(15px);
-            background: rgba(255, 255, 255, 0.75);
-            padding: 24px 32px;
-            border-radius: 16px;
-            border-left: 4px solid var(--palo-rosa);
-            box-shadow: 0 4px 20px rgba(139, 115, 85, 0.15);
-            animation: slideIn 1.2s ease-out backwards;
+            color: var(--ink);
+            margin-bottom: 24px;
+            background: var(--paper-card);
+            padding: 24px 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(168, 121, 46, 0.28);
+            border-left: 4px solid var(--terracotta);
+            box-shadow: 0 6px 20px rgba(43, 32, 22, 0.1);
+            animation: slideIn 1s ease-out backwards;
         }
 
-        .intro-text:nth-of-type(1) {
-            animation-delay: 0.3s;
+        .intro-text:nth-of-type(1) { animation-delay: 0.15s; }
+        .intro-text:nth-of-type(2) { animation-delay: 0.25s; }
+        .intro-text:nth-of-type(3) { animation-delay: 0.35s; }
+        .intro-text:nth-of-type(4) { animation-delay: 0.45s; }
+        .intro-text:nth-of-type(5) { animation-delay: 0.55s; }
+        .intro-text:nth-of-type(6) { animation-delay: 0.65s; }
+        .intro-text:nth-of-type(7) { animation-delay: 0.75s; }
+        .intro-text:nth-of-type(8) { animation-delay: 0.85s; }
+
+        /* ---------- year tabs ---------- */
+        .year-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 32px;
         }
 
-        .intro-text:nth-of-type(2) {
-            animation-delay: 0.5s;
+        .year-tab {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.95em;
+            letter-spacing: 0.15em;
+            padding: 10px 30px;
+            border-radius: 999px;
+            border: 1.5px dashed var(--brass);
+            background: rgba(255,255,255,0.4);
+            color: var(--ink-soft);
+            cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+            font-weight: 700;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
-        .intro-text:nth-of-type(3) {
-            animation-delay: 0.7s;
+        .year-tab:hover { background: rgba(255,255,255,0.65); transform: translateY(-2px); }
+
+        .year-tab.active {
+            background: radial-gradient(circle at 32% 28%, var(--brass-light), var(--terracotta) 78%);
+            border-style: solid;
+            border-color: transparent;
+            color: var(--cream);
+            box-shadow: 0 8px 20px rgba(177, 81, 46, 0.35);
         }
 
-        .intro-text:nth-of-type(4) {
-            animation-delay: 0.9s;
-        }
-
-        .intro-text:nth-of-type(5) {
-            animation-delay: 1.1s;
-        }
-
-        .intro-text:nth-of-type(6) {
-            animation-delay: 1.3s;
-        }
+        .year-panel { display: none; }
+        .year-panel.active { display: block; }
 
         .highlight {
-            color: var(--palo-rosa);
+            font-family: 'Caveat', cursive;
+            color: var(--terracotta);
             font-weight: 600;
-            font-style: italic;
-            font-size: 1.05em;
+            font-size: 1.35em;
         }
 
         .continue-btn {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             width: fit-content;
-            margin: 70px auto 0;
-            padding: 18px 50px;
-            background: rgba(212, 165, 165, 0.3);
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--palo-rosa);
-            border-radius: 50px;
-            color: var(--marron);
-            font-size: 1.15em;
+            margin: 60px auto 0;
+            padding: 17px 46px;
+            background: radial-gradient(circle at 32% 28%, var(--brass-light), var(--terracotta) 78%);
+            border: none;
+            border-radius: 999px;
+            color: var(--cream);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.95em;
             text-decoration: none;
-            transition: all 0.4s ease;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            box-shadow: 0 4px 15px rgba(212, 165, 165, 0.3);
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            box-shadow:
+                0 10px 24px rgba(177, 81, 46, 0.4),
+                inset 0 2px 2px rgba(255,255,255,0.4),
+                inset 0 -3px 6px rgba(0,0,0,0.22);
+            animation: btnPulse 3.5s ease-in-out infinite;
         }
 
         .continue-btn:hover {
-            background: rgba(168, 216, 230, 0.4);
-            border-color: var(--celeste);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(168, 216, 230, 0.4);
+            transform: translateY(-3px) scale(1.03);
         }
 
-        @keyframes float-cloud {
-            from {
-                left: -200px;
-            }
-
-            to {
-                left: 110%;
-            }
+        .track-count-hint {
+            display: block;
+            text-align: center;
+            margin-top: 26px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8em;
+            letter-spacing: 0.15em;
+            color: var(--ink-soft);
+            opacity: 0;
+            animation: slideIn 1.2s ease-out 1.5s forwards;
         }
 
-        @keyframes sway {
-
-            0%,
-            100% {
-                transform: rotate(-8deg);
+        @keyframes btnPulse {
+            0%, 100% {
+                box-shadow: 0 10px 24px rgba(177, 81, 46, 0.4), inset 0 2px 2px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.22);
             }
-
             50% {
-                transform: rotate(8deg);
-            }
-        }
-
-        @keyframes fall {
-            0% {
-                top: -10%;
-                opacity: 0.7;
-                transform: rotate(0deg);
-            }
-
-            100% {
-                top: 110%;
-                opacity: 0;
-                transform: rotate(720deg);
-            }
-        }
-
-        @keyframes fly {
-
-            0%,
-            100% {
-                left: -10%;
-                top: 20%;
-                transform: scale(1);
-            }
-
-            50% {
-                left: 110%;
-                top: 60%;
-                transform: scale(1.2);
+                box-shadow: 0 14px 32px rgba(177, 81, 46, 0.55), inset 0 2px 2px rgba(255,255,255,0.45), inset 0 -3px 6px rgba(0,0,0,0.22);
             }
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
+            from { opacity: 0; transform: translateX(-24px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
 
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        @media (prefers-reduced-motion: reduce) {
+            .hero-compass, .continue-btn { animation: none !important; }
         }
 
         @media (max-width: 768px) {
-            .variable-title {
-                font-size: 2.5em;
-                letter-spacing: 6px;
-                padding: 15px 25px;
-            }
-
-            .intro-text {
-                font-size: 1.05em;
-                padding: 20px 25px;
-            }
-
-            .intro-container {
-                padding: 60px 20px;
-            }
+            .hero-compass { width: 420px; height: 420px; }
+            .variable-title { font-size: 2.3em; letter-spacing: 0.03em; }
+            .intro-text { font-size: 1.02em; padding: 20px 22px; }
+            .intro-container { padding: 60px 20px; }
         }
 
         @media (max-width: 480px) {
-            .variable-title {
-                font-size: 2em;
-                letter-spacing: 4px;
-                padding: 12px 20px;
-            }
-
-            .intro-text {
-                font-size: 1em;
-                padding: 18px 20px;
-            }
-
-            .intro-container {
-                padding: 40px 15px;
-            }
+            .variable-title { font-size: 1.8em; }
+            .intro-text { font-size: 0.98em; padding: 18px 18px; }
+            .intro-container { padding: 44px 15px; }
+            .continue-btn { padding: 15px 34px; font-size: 0.85em; }
         }
     </style>
 </head>
 
 <body>
-    <!-- Cielo con nubes -->
-    <div class="sky" id="sky"></div>
-
-    <!-- Jardín de flores -->
-    <div class="garden" id="garden"></div>
-
-    <!-- Elementos cayendo -->
-    <div class="falling-elements" id="fallingElements"></div>
-
-    <!-- Mariposas -->
-    <div class="butterfly" style="animation-delay: 0s;">🦋</div>
-    <div class="butterfly" style="animation-delay: 5s; animation-duration: 20s;">🦋</div>
+    <div class="hero-compass" id="hero-compass" aria-hidden="true"></div>
 
     <div class="intro-container">
         <div class="content-wrapper">
+            <span class="field-tag">🧭 Diario de expedición</span>
             <h1 class="variable-title">LA VARIABLE E</h1>
 
-            <p class="intro-text">
-                Nos obsesionamos con encontrar constantes porque, en el fondo, le tenemos pánico a la incertidumbre. En
-                mi carrera, y en mi propia existencia, me entrené para habitar siempre en el centro de la Campana de
-                Gauss; justo ahí, en el promedio, donde la estadística dice que la vida es segura, predecible y libre de
-                riesgos.
-            </p>
+            <div class="year-tabs" role="tablist">
+                <button type="button" class="year-tab active" data-year="2025" onclick="switchYear('2025')" role="tab" aria-selected="true">2025</button>
+                <button type="button" class="year-tab" data-year="2026" onclick="switchYear('2026')" role="tab" aria-selected="false">2026</button>
+            </div>
 
-            <p class="intro-text">
-                Vivía evitando las desviaciones estándar, resolviendo ecuaciones lineales en una realidad monocromática,
-                convencido de que el orden matemático era lo más cercano que existía a la felicidad.
-            </p>
+            <div id="year-2025" class="year-panel active">
+                <p class="intro-text">
+                    Nos obsesionamos con encontrar constantes porque, en el fondo, le tenemos pánico a la incertidumbre. En
+                    mi carrera, y en mi propia existencia, me entrené para habitar siempre en el centro de la Campana de
+                    Gauss; justo ahí, en el promedio, donde la estadística dice que la vida es segura, predecible y libre de
+                    riesgos.
+                </p>
 
-            <p class="intro-text">
-                Pero la vida, con su infinita ironía, introdujo un factor que desafió todas mis probabilidades: <span
-                    class="highlight">La Variable E</span>.
-            </p>
+                <p class="intro-text">
+                    Vivía evitando las desviaciones estándar, resolviendo ecuaciones lineales en una realidad monocromática,
+                    convencido de que el orden matemático era lo más cercano que existía a la felicidad.
+                </p>
 
-            <p class="intro-text">
-                Tú eres ese dato atípico, esa anomalía hermosa que cae en los extremos de la curva, allí donde sucede lo
-                imposible. Una incógnita que no estaba en mis cálculos y que, sin embargo, se convirtió en el resultado
-                de todo.
-            </p>
+                <p class="intro-text">
+                    Pero la vida, con su infinita ironía, introdujo un factor que desafió todas mis probabilidades: <span
+                        class="highlight">La Variable E</span>.
+                </p>
 
-            <p class="intro-text">
-                Descubrí que <span class="highlight">"E"</span> es mucho más que una letra: E es el <span
-                    class="highlight">Equilibrio</span> que paradójicamente aceleró mis latidos. E es el <span
-                    class="highlight">Esplendor</span> que refractó la luz en mis días grises. E es la <span
-                    class="highlight">Energía</span> que convirtió mi mecánica en vida. Y, inevitablemente, E es <span
-                    class="highlight">Evelyn</span>.
-            </p>
+                <p class="intro-text">
+                    Tú eres ese dato atípico, esa anomalía hermosa que cae en los extremos de la curva, allí donde sucede lo
+                    imposible. Una incógnita que no estaba en mis cálculos y que, sin embargo, se convirtió en el resultado
+                    de todo.
+                </p>
 
-            <p class="intro-text">
-                Este álbum es la demostración empírica de que hay verdades que escapan a la estadística. Porque mientras
-                la ciencia nos explica cómo funciona el universo, tú llegaste para explicarme por qué vale la pena estar
-                en él.
-            </p>
+                <p class="intro-text">
+                    Descubrí que <span class="highlight">"E"</span> es mucho más que una letra: E es el <span
+                        class="highlight">Equilibrio</span> que paradójicamente aceleró mis latidos. E es el <span
+                        class="highlight">Esplendor</span> que refractó la luz en mis días grises. E es la <span
+                        class="highlight">Energía</span> que convirtió mi mecánica en vida. Y, inevitablemente, E es <span
+                        class="highlight">Evelyn</span>.
+                </p>
 
-            <a href="menu.html" class="continue-btn">Abrir Álbum 🌸</a>
+                <p class="intro-text">
+                    Este álbum es la demostración empírica de que hay verdades que escapan a la estadística. Porque mientras
+                    la ciencia nos explica cómo funciona el universo, tú llegaste para explicarme por qué vale la pena estar
+                    en él.
+                </p>
+            </div>
+
+            <div id="year-2026" class="year-panel">
+                <p class="intro-text">
+                    El año pasado escribí sobre encontrarte. Sobre cómo, entre todas las posibilidades, apareciste tú, y
+                    cómo una variable que jamás había contemplado terminó alterando todas mis certezas. Te llamé anomalía,
+                    porque todavía necesitaba encontrar una palabra que explicara lo extraordinario de haberte conocido.
+                    Pero creo que este año entendí algo: ya no estoy buscando. No estoy esperando que aparezca alguien
+                    que cambie mis probabilidades, ni persiguiendo una respuesta entre millones de posibilidades. Porque
+                    ya te encontré. Y, de alguna manera que todavía me cuesta explicar, <span class="highlight">tú también
+                    me encontraste a mí</span>.
+                </p>
+
+                <p class="intro-text">
+                    Lo curioso es que esta no es la primera vez que nuestros caminos se cruzan, y quizá por eso pensé que
+                    sabíamos lo que significaba esto. Creí que reencontrarse era volver al lugar donde alguna vez
+                    estuvimos, repetir una historia con algunos capítulos nuevos, retomar una conversación que había
+                    quedado a medias. Pero no era volver. Porque nosotros tampoco somos los mismos: el tiempo hizo lo
+                    suyo, nos cambió en lugares que ni siquiera sabíamos que podían cambiar, y nos convirtió, poco a
+                    poco, en personas que quizá nuestros antiguos yo ni siquiera reconocerían por completo. Y entonces
+                    ocurrió algo hermoso: volvimos a encontrarnos siendo otros.
+                </p>
+
+                <p class="intro-text">
+                    Por eso esto no se siente como una segunda oportunidad para vivir algo antiguo, sino como la primera
+                    oportunidad de vivir algo que antes no existía. Porque tú sigues siendo tú, yo sigo siendo yo, pero
+                    hay algo que aparece cuando estamos juntos que no pertenece completamente a ninguno de los dos. Algo
+                    que antes no estaba. Algo que no podemos encontrar mirando hacia atrás. Algo nuestro. Y tal vez eso
+                    sea lo que más me gusta de nosotros ahora: que no estamos intentando demostrar que lo que alguna vez
+                    sentimos todavía existe. Estamos descubriendo qué podemos sentir ahora, sin instrucciones, sin
+                    expectativas, sin tratar de obligar al presente a parecerse al pasado. Simplemente dejando que
+                    suceda.
+                </p>
+
+                <p class="intro-text">
+                    Y quizá esa sea la parte más bonita de todo esto: después de haber pasado tanto tiempo intentando
+                    entender la vida como una serie de causas y consecuencias, descubrí que algunas de las cosas más
+                    importantes no se calculan, no se predicen, no se fuerzan. Se construyen: día a día, conversación a
+                    conversación, mirada a mirada. Pequeños momentos que, vistos por separado, parecen insignificantes,
+                    pero que juntos empiezan a formar algo que todavía no tiene nombre. Y me gusta que todavía no lo
+                    tenga, porque significa que tenemos la oportunidad de nombrarlo nosotros, de descubrirlo nosotros,
+                    de verlo crecer.
+                </p>
+
+                <p class="intro-text">
+                    Quizá antes creíamos que ya sabíamos cómo se sentía esto. Hoy sabemos que no. Y qué bonito es
+                    descubrir que, incluso después de haber conocido una emoción, una persona, una historia, la vida
+                    todavía puede sorprendernos con una versión que no conocíamos: una versión más consciente, más
+                    tranquila, más nuestra. Por eso no quiero decir que estamos volviendo a empezar. Quiero decir que
+                    estamos empezando algo distinto: algo que nace de todo lo que fuimos, pero que no está condenado a
+                    repetirlo. Algo que lleva nuestras historias anteriores, pero que tiene páginas completamente
+                    nuevas.
+                </p>
+
+                <p class="intro-text">
+                    Si el año pasado te escribí porque haberte encontrado parecía desafiar todas mis probabilidades,
+                    este año quiero escribirte por algo todavía más extraño: porque después de encontrarte, la vida
+                    consiguió hacer que nos encontráramos de nuevo. Pero esta vez no como los que éramos, sino como los
+                    que somos. Y quizá, sin darnos cuenta, eso sea lo verdaderamente extraordinario: no que el destino
+                    haya vuelto a cruzar nuestros caminos, sino que, después de todo lo vivido, hayamos decidido
+                    caminar un poco en la misma dirección.
+                </p>
+
+                <p class="intro-text">
+                    Así que este álbum no es una prueba de que volvimos. No es una celebración del pasado. Ni siquiera
+                    es una respuesta a todo lo que alguna vez nos preguntamos. Es simplemente una pequeña constancia de
+                    este momento, de nosotros, de lo que está naciendo mientras todavía aprendemos a llamarlo. Porque
+                    el año pasado pensé que lo extraordinario había sido encontrarte. Hoy creo que estaba equivocado:
+                    lo extraordinario no fue encontrarte, sino descubrir que, después de habernos encontrado una vez,
+                    todavía quedaba una versión de nosotros que ninguno de los dos conocía. Y ahora estamos aquí,
+                    descubriéndola, sin saber exactamente dónde nos llevará, sin necesidad de saberlo todavía.
+                </p>
+
+                <p class="intro-text">
+                    Porque esta vez ya no quiero conocer el resultado antes de vivir el proceso. Quiero quedarme para
+                    verlo suceder: cada conversación, cada risa, cada silencio, cada día bueno, cada día difícil, cada
+                    cosa que todavía no sabemos del otro. Quiero ver qué ocurre cuando dos personas que ya se
+                    conocieron una vez tienen la oportunidad de conocerse de verdad otra vez. Y si tuviera que escribir
+                    una última ecuación para todo esto, sería la más sencilla que he escrito: <span class="highlight">tú
+                    + yo ≠ lo que fuimos. Tú + yo = algo que todavía estamos descubriendo</span>. Y quizá por primera
+                    vez en mi vida, no me preocupa no conocer el resultado, porque sé algo que antes no sabía: ya no
+                    estoy buscando la respuesta. Estoy aquí. Contigo. Y eso, por ahora, es exactamente donde quiero
+                    estar.
+                </p>
+            </div>
+
+            <a href="menu.html" class="continue-btn">Abrir Álbum 🧭</a>
+            <span class="track-count-hint" id="track-count-hint"></span>
         </div>
     </div>
 
+    <script src="js/tracks.js"></script>
     <script>
-        // Crear nubes
-        const sky = document.getElementById('sky');
-        for (let i = 0; i < 4; i++) {
-            const cloud = document.createElement('div');
-            cloud.className = 'cloud';
-            cloud.style.width = (Math.random() * 80 + 80) + 'px';
-            cloud.style.height = (Math.random() * 30 + 30) + 'px';
-            cloud.style.top = (Math.random() * 60) + '%';
-            cloud.style.left = (Math.random() * -200) + 'px';
-            cloud.style.animationDuration = (Math.random() * 40 + 60) + 's';
-            cloud.style.animationDelay = (i * 15) + 's';
-            sky.appendChild(cloud);
+        function switchYear(year) {
+            document.querySelectorAll('.year-tab').forEach(btn => {
+                const isMatch = btn.dataset.year === year;
+                btn.classList.toggle('active', isMatch);
+                btn.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+            });
+            document.querySelectorAll('.year-panel').forEach(panel => {
+                panel.classList.toggle('active', panel.id === `year-${year}`);
+            });
         }
 
-        // Crear flores en el jardín
-        const garden = document.getElementById('garden');
-        const flowers = ['🌸', '🌺', '🌼', '🌷', '🌹', '🌻'];
-        for (let i = 0; i < 12; i++) {
-            const flower = document.createElement('div');
-            flower.className = 'ground-flower';
-            flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
-            flower.style.left = (i * 8 + Math.random() * 5) + '%';
-            flower.style.animationDelay = (Math.random() * 2) + 's';
-            flower.style.animationDuration = (Math.random() * 2 + 3) + 's';
-            garden.appendChild(flower);
+        if (typeof tracks !== 'undefined') {
+            const hint = document.getElementById('track-count-hint');
+            if (hint) hint.textContent = `📖 ${tracks.length} canciones te esperan`;
         }
 
-        // Crear pétalos y hojas cayendo
-        const fallingContainer = document.getElementById('fallingElements');
-        function createFallingElement() {
-            const element = document.createElement('div');
-            const isLeaf = Math.random() > 0.7;
-
-            if (isLeaf) {
-                element.className = 'leaf';
-                element.textContent = '🍃';
-            } else {
-                element.className = 'petal';
+        // Compás decorativo (mismo trazo que el álbum)
+        (function buildCompass() {
+            const hero = document.getElementById('hero-compass');
+            if (!hero) return;
+            const color = '#A8792E';
+            let lines = '';
+            for (let i = 0; i < 24; i++) {
+                const deg = i * 15;
+                const major = deg % 90 === 0;
+                const len = major ? 16 : 8;
+                const width = major ? 2.2 : 1.1;
+                const op = major ? 0.9 : 0.5;
+                lines += `<line x1="100" y1="4" x2="100" y2="${4 + len}" transform="rotate(${deg} 100 100)" stroke="${color}" stroke-width="${width}" stroke-linecap="round" opacity="${op}"/>`;
             }
-
-            element.style.left = Math.random() * 100 + '%';
-            element.style.animationDuration = (Math.random() * 10 + 15) + 's';
-            element.style.animationDelay = Math.random() * 5 + 's';
-            fallingContainer.appendChild(element);
-
-            setTimeout(() => element.remove(), 25000);
-        }
-
-        for (let i = 0; i < 20; i++) {
-            setTimeout(createFallingElement, i * 800);
-        }
-
-        setInterval(createFallingElement, 3000);
+            const labels = [[0, 'N'], [90, 'E'], [180, 'S'], [270, 'W']]
+                .map(([deg, t]) => `<text x="100" y="34" text-anchor="middle" transform="rotate(${deg} 100 100)" font-family="'Space Mono', monospace" font-size="14" font-weight="700" fill="${color}">${t}</text>`)
+                .join('');
+            hero.innerHTML = `<svg viewBox="0 0 200 200" class="w-full h-full" style="width:100%;height:100%;">${lines}${labels}<circle cx="100" cy="100" r="96" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.5"/></svg>`;
+        })();
     </script>
 </body>
 

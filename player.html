@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuestra Historia - Álbum</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,400..600&family=Literata:ital,wght@0,400;0,500;0,600;1,400&family=Caveat:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -18,28 +19,28 @@
             theme: {
                 extend: {
                     colors: {
-                        'rose-love': '#e8c4c4',
-                        'blue-dream': '#a8d8e6',
-                        'sand': '#f5e6d3',
-                        'cocoa': '#5a4638',
-                        'glass': 'rgba(255, 255, 255, 0.25)',
-                        'glass-border': 'rgba(255, 255, 255, 0.5)',
-                        'glass-dark': 'rgba(255, 255, 255, 0.55)'
+                        paper: '#F4ECD8',
+                        'paper-card': '#ECE0C2',
+                        'paper-deep': '#DCC994',
+                        cream: '#FBF5E6',
+                        ink: '#2B2016',
+                        'ink-soft': '#5C4A34',
+                        brass: '#A8792E',
+                        'brass-light': '#D2A94B',
+                        terracotta: '#B1512E',
+                        'terracotta-light': '#C97148',
+                        dusk: '#1F2C46',
+                        'dusk-deep': '#141D30',
+                        'dusk-light': '#2E4066'
                     },
                     fontFamily: {
-                        serif: ['"Playfair Display"', 'serif'],
-                        sans: ['"Quicksand"', 'sans-serif']
+                        serif: ['"Fraunces"', 'serif'],
+                        sans: ['"Literata"', 'serif'],
+                        hand: ['"Caveat"', 'cursive'],
+                        mono: ['"Space Mono"', 'monospace']
                     },
                     animation: {
-                        'spin-slow': 'spin 8s linear infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-soft': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' }
-                        }
+                        'spin-slow': 'spin 8s linear infinite'
                     }
                 }
             }
@@ -48,82 +49,53 @@
 
     <style>
         :root {
-            --glass: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.5);
+            --paper: #F4ECD8;
+            --paper-card: #ECE0C2;
+            --paper-deep: #DCC994;
+            --cream: #FBF5E6;
+            --ink: #2B2016;
+            --ink-soft: #5C4A34;
+            --brass: #A8792E;
+            --brass-light: #D2A94B;
+            --terracotta: #B1512E;
+            --terracotta-light: #C97148;
+            --dusk: #1F2C46;
+            --dusk-deep: #141D30;
+            --dusk-light: #2E4066;
         }
 
+        * { box-sizing: border-box; }
+
         body {
-            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #a18cd1, #fbc2eb);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            font-family: 'Quicksand', sans-serif;
-            color: #5a4638;
+            background-color: var(--paper);
+            background-image:
+                radial-gradient(ellipse 900px 550px at 12% -8%, rgba(255,255,255,0.55), transparent 60%),
+                radial-gradient(ellipse 700px 500px at 100% 8%, rgba(177,81,46,0.08), transparent 55%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.16  0 0 0 0 0.12  0 0 0 0 0.08  0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-attachment: fixed;
+            font-family: 'Literata', serif;
+            color: var(--ink);
             overflow-x: hidden;
         }
 
-        body.player-open {
-            overflow: hidden;
-        }
+        body.player-open { overflow: hidden; }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes petalFall {
-            0% {
-                transform: translateY(-10vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% { opacity: .8; }
-            100% {
-                transform: translateY(110vh) translateX(30px) rotate(240deg);
-                opacity: 0;
-            }
+        :focus-visible {
+            outline: 2px solid var(--terracotta);
+            outline-offset: 3px;
         }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.5); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: rgba(168, 121, 46, 0.45); border-radius: 10px; }
 
+        /* ---------- shared surfaces ---------- */
         .glass-panel {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-        }
-
-        .vinyl-record {
-            background: repeating-radial-gradient(#111 0, #111 2px, #333 3px, #333 4px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            position: relative;
-            transition: transform 0.5s ease;
-            animation-play-state: paused;
-        }
-
-        .vinyl-label {
-            background-size: cover;
-            background-position: center;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            border: 4px solid rgba(255,255,255,0.3);
-        }
-
-        .petal {
-            position: absolute;
-            background-color: #fff0f5;
-            border-radius: 150% 0 150% 0;
-            opacity: 0.8;
-            pointer-events: none;
-            z-index: 0;
-            animation-name: petalFall;
-            animation-timing-function: linear;
-            animation-iteration-count: infinite;
+            background: rgba(251, 245, 230, 0.74);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(168, 121, 46, 0.32);
+            box-shadow: 0 10px 28px rgba(43, 32, 22, 0.16);
         }
 
         .view-section {
@@ -142,56 +114,384 @@
             inset: 0;
         }
 
-        .song-card {
-            min-height: 120px;
+        /* ---------- hero / header ---------- */
+        .hero-compass {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 640px;
+            height: 640px;
+            transform: translate(-50%, -50%);
+            opacity: 0.07;
+            pointer-events: none;
+            animation: spin 100s linear infinite;
         }
 
-        .song-play-btn {
-            width: 56px;
-            height: 56px;
-            border-radius: 9999px;
+        .wax-seal {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 22px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 32% 28%, var(--terracotta-light), var(--terracotta) 72%);
+            color: var(--cream);
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            box-shadow:
+                0 6px 14px rgba(177, 81, 46, 0.4),
+                inset 0 1px 1px rgba(255,255,255,0.4),
+                inset 0 -3px 5px rgba(0,0,0,0.25);
+            transform: rotate(-2deg);
+        }
+
+        .field-tag {
+            align-items: center;
+            gap: 8px;
+            padding: 7px 18px;
+            border: 1px dashed var(--brass);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.4);
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.06em;
+            color: var(--ink-soft);
+        }
+
+        /* ---------- journal entry cards ---------- */
+        .entry-card,
+        .entry-play,
+        .chrome-btn,
+        .play-btn-main {
+            font: inherit;
+            appearance: none;
+            -webkit-appearance: none;
+            border: none;
+            background: none;
+        }
+
+        .entry-card {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+            text-align: left;
+            padding: 14px;
+            border-radius: 12px;
+            background: var(--paper-card);
+            border: 1px solid rgba(168, 121, 46, 0.3);
+            box-shadow: 0 6px 16px rgba(43, 32, 22, 0.13);
+            cursor: pointer;
+            transform: rotate(var(--tilt, 0deg));
+            transition: transform .35s ease, box-shadow .35s ease;
+            animation: cardIn .6s ease backwards;
+        }
+
+        .entry-card:hover,
+        .entry-card:focus-visible {
+            transform: rotate(0deg) translateY(-4px);
+            box-shadow: 0 18px 30px rgba(43, 32, 22, 0.22);
+        }
+
+        .entry-photo {
+            position: relative;
+            width: 84px;
+            height: 84px;
+            flex-shrink: 0;
+            border-radius: 7px;
+            border: 3px solid var(--cream);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.22);
+            background: var(--paper-deep);
+        }
+
+        .entry-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 3px;
+        }
+
+        .entry-tape {
+            position: absolute;
+            top: -9px;
+            left: 50%;
+            width: 44px;
+            height: 16px;
+            transform: translateX(-50%) rotate(-3deg);
+            background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.35));
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        .entry-stamp {
+            position: absolute;
+            bottom: -9px;
+            left: -9px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255,255,255,.6);
-            color: #fb7185;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--paper);
+            border: 1.5px dashed var(--terracotta);
+            color: var(--terracotta);
+            font-family: 'Space Mono', monospace;
+            font-size: 8px;
+            font-weight: 700;
+            transform: rotate(-10deg);
+        }
+
+        .entry-new {
+            position: absolute;
+            top: -10px;
+            right: -6px;
+            z-index: 5;
+            padding: 4px 12px;
+            border-radius: 999px;
+            background: var(--terracotta);
+            color: var(--cream);
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transform: rotate(6deg);
+            box-shadow: 0 4px 10px rgba(177,81,46,0.4);
+        }
+
+        .entry-body { flex: 1; min-width: 0; }
+
+        .entry-chapter {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--terracotta);
+            margin-bottom: 4px;
+        }
+
+        .entry-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--ink);
+            line-height: 1.18;
+        }
+
+        .entry-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .entry-artist {
+            font-family: 'Caveat', cursive;
+            font-size: 1.15rem;
+            color: var(--ink-soft);
+            line-height: 1;
+        }
+
+        .patch {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 10px;
+            border-radius: 999px;
+            border: 1px dashed var(--brass);
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+            background: rgba(255,255,255,0.45);
             flex-shrink: 0;
         }
 
-        .song-play-btn i {
-            font-size: 22px;
-            line-height: 1;
-            margin-left: 2px;
+        .entry-play {
+            margin-left: auto;
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--paper);
+            border: 1px solid rgba(168, 121, 46, 0.4);
+            color: var(--terracotta);
+            transition: background .3s ease, color .3s ease, transform .3s ease;
         }
 
-        #player-view {
-            max-width: 100vw;
+        .entry-play i { font-size: 20px; margin-left: 2px; }
+
+        .entry-card:hover .entry-play {
+            background: var(--terracotta);
+            color: var(--cream);
+            transform: scale(1.08);
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(14px) rotate(var(--tilt, 0deg)); }
+            to { opacity: 1; transform: translateY(0) rotate(var(--tilt, 0deg)); }
+        }
+
+        /* ---------- compass disc (was: vinyl) ---------- */
+        .vinyl-wrap {
+            width: 384px;
+            height: 384px;
+            filter: drop-shadow(0 18px 26px rgba(20, 14, 8, 0.35));
+        }
+
+        .compass-pointer {
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; height: 0;
+            border-left: 9px solid transparent;
+            border-right: 9px solid transparent;
+            border-top: 14px solid var(--terracotta-light);
+            z-index: 5;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+        }
+
+        .vinyl-record {
+            position: relative;
+            background:
+                radial-gradient(circle at 34% 28%, rgba(255,255,255,0.32), transparent 42%),
+                conic-gradient(from 200deg, #8a6526, #d2a94b, #6e4f1c, #dcb662, #8a6526);
+            box-shadow:
+                0 15px 34px rgba(20, 14, 8, 0.4),
+                inset 0 0 0 6px rgba(255,255,255,0.12),
+                inset 0 0 28px rgba(0,0,0,0.35);
+            animation-play-state: paused;
+        }
+
+        .compass-ticks {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .vinyl-label {
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 58%;
+            height: 58%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 5px solid var(--cream);
+            box-shadow: 0 4px 18px rgba(0,0,0,0.35), inset 0 0 0 2px rgba(0,0,0,0.12);
+        }
+
+        .compass-pin {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 14px; height: 14px;
+            background: radial-gradient(circle at 35% 30%, #fff2d0, var(--brass) 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+
+        /* ---------- night player view ---------- */
+        .player-night {
+            background:
+                radial-gradient(ellipse 900px 520px at 50% -8%, rgba(80, 106, 156, 0.45), transparent 60%),
+                linear-gradient(180deg, var(--dusk) 0%, var(--dusk-deep) 100%);
+            overflow-y: auto;
             overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
-        .lyrics-box {
-            max-height: 290px;
-            overflow-y: auto;
+        .player-night::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(1.5px 1.5px at 18% 24%, rgba(255,255,255,0.85), transparent),
+                radial-gradient(1px 1px at 68% 14%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1.5px 1.5px at 86% 58%, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1px 1px at 38% 78%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(1.5px 1.5px at 54% 42%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 8% 66%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(1.5px 1.5px at 92% 8%, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1px 1px at 30% 12%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(1.5px 1.5px at 76% 88%, rgba(255,255,255,0.6), transparent);
+            opacity: 0.85;
+            animation: twinkle 6s ease-in-out infinite alternate;
+            pointer-events: none;
         }
 
-        .dedication-box {
-            max-height: 36vh;
-            overflow-y: auto;
+        @keyframes twinkle {
+            0% { opacity: 0.55; }
+            100% { opacity: 0.95; }
         }
 
-        #dedication-card {
-            scroll-margin-top: 16px;
+        .chrome-btn {
+            width: 40px; height: 40px; border-radius: 999px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: var(--cream);
+            transition: background .3s ease, transform .3s ease, color .3s ease;
         }
 
-        .dedication-box::-webkit-scrollbar {
-            width: 6px;
+        .chrome-btn:hover { background: rgba(255,255,255,0.16); transform: translateY(-2px); }
+        .chrome-btn.liked { color: var(--terracotta-light); background: rgba(193,96,61,0.28); border-color: rgba(193,96,61,0.55); }
+
+        .play-btn-main {
+            width: 80px; height: 80px;
+            border-radius: 999px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--cream);
+            font-size: 2rem;
+            background: radial-gradient(circle at 32% 28%, var(--brass-light), var(--terracotta) 72%);
+            box-shadow:
+                0 10px 24px rgba(177, 81, 46, 0.45),
+                inset 0 2px 3px rgba(255,255,255,0.45),
+                inset 0 -4px 8px rgba(0,0,0,0.25);
+            transition: transform .3s ease, box-shadow .3s ease;
+            cursor: pointer;
         }
 
-        .dedication-box::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 10px;
-        }
+        .play-btn-main:hover { transform: scale(1.06); }
+        .play-btn-main:active { transform: scale(0.94); }
 
+        .skip-btn {
+            color: var(--cream);
+            opacity: 0.7;
+            transition: opacity .3s ease, transform .3s ease;
+        }
+        .skip-btn:hover { opacity: 1; transform: scale(1.1); }
+
+        #player-view { max-width: 100vw; overflow-x: hidden; }
+
+        .lyrics-box { max-height: 290px; overflow-y: auto; }
+        .dedication-box { max-height: 36vh; overflow-y: auto; }
+        #dedication-card { scroll-margin-top: 16px; }
+
+        #player-dedication { white-space: pre-line; }
+
+        @keyframes heartPop {
+            0% { transform: scale(1); }
+            35% { transform: scale(1.45); }
+            60% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+        .heart-pop { animation: heartPop .45s ease; }
+
+        /* ---------- progress bar ---------- */
         input[type=range] {
             -webkit-appearance: none;
             appearance: none;
@@ -201,103 +501,134 @@
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            height: 16px;
-            width: 16px;
+            height: 15px;
+            width: 15px;
             border-radius: 50%;
-            background: #ffffff;
+            background: var(--cream);
+            border: 2px solid var(--terracotta);
             cursor: pointer;
-            margin-top: -6px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            margin-top: -5.5px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
 
         input[type=range]::-webkit-slider-runnable-track {
             width: 100%;
             height: 4px;
             cursor: pointer;
-            background: rgba(255,255,255,0.4);
+            background: transparent;
             border-radius: 2px;
         }
 
+        input[type=range]::-moz-range-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.25);
+            border-radius: 2px;
+        }
+
+        input[type=range]::-moz-range-progress {
+            height: 4px;
+            background: var(--terracotta-light);
+            border-radius: 2px;
+        }
+
+        input[type=range]::-moz-range-thumb {
+            height: 15px; width: 15px; border-radius: 50%;
+            background: var(--cream);
+            border: 2px solid var(--terracotta);
+        }
+
         @media (max-width: 767px) {
-            #player-view {
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
-            }
+            #player-view { overflow-y: auto; -webkit-overflow-scrolling: touch; }
             .player-content {
                 overflow-y: visible;
                 padding-bottom: 180px;
                 padding-top: 6px;
                 gap: 18px;
             }
+            .hero-compass { width: 380px; height: 380px; }
             .vinyl-wrap { width: 220px; height: 220px; }
-            .song-card { min-height: 98px; }
-            .song-play-btn {
-                width: 46px;
-                height: 46px;
-            }
-            .song-play-btn i { font-size: 18px; }
+            .entry-card { padding: 12px; gap: 12px; }
+            .entry-photo { width: 66px; height: 66px; }
+            .entry-title { font-size: 1.05rem; }
+            .entry-play { width: 44px; height: 44px; }
+            .entry-play i { font-size: 18px; }
             .lyrics-box,
-            .dedication-box {
-                max-height: none;
-                overflow: visible;
+            .dedication-box { max-height: none; overflow: visible; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-compass, .entry-card, .player-night::before, .vinyl-record {
+                animation: none !important;
             }
         }
     </style>
 </head>
 <body>
-    <div id="petals-container" class="fixed inset-0 overflow-hidden pointer-events-none z-0"></div>
 
     <div id="menu-view" class="view-section relative z-10 px-4 py-8 md:px-8 max-w-7xl mx-auto">
-        <header class="text-center mb-12 animate-float">
-            <span class="inline-block py-1 px-4 rounded-full glass-panel text-sm font-semibold tracking-widest text-cocoa mb-4 uppercase">Para Ti</span>
-            <h1 class="text-4xl md:text-6xl font-serif font-bold text-cocoa drop-shadow-sm mb-2">Nuestra Historia</h1>
-            <p class="text-base md:text-xl text-cocoa/80 font-serif italic">Cada canción, un momento juntos.</p>
+        <header class="relative text-center mb-14">
+            <div class="hero-compass" id="hero-compass" aria-hidden="true"></div>
+            <div class="relative z-10">
+                <span class="wax-seal">Para Ti</span>
+                <h1 class="mt-5 text-4xl md:text-6xl font-serif font-semibold text-ink drop-shadow-sm mb-3">Nuestra Historia</h1>
+                <p class="font-hand text-2xl md:text-3xl text-ink-soft mb-5">Cada canción, un momento juntos.</p>
+                <p id="album-stats" class="field-tag inline-flex"></p>
+            </div>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="songs-grid"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10" id="songs-grid"></div>
     </div>
 
-    <div id="player-view" class="hidden-view glass-panel fixed inset-0 z-50 flex flex-col backdrop-blur-xl bg-white/40">
-        <div class="flex justify-between items-center p-4 md:p-6">
-            <button onclick="toggleView('menu')" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center hover:bg-white/40 transition" title="Minimizar">
-                <i class="ph ph-caret-down text-2xl"></i>
+    <div id="player-view" class="hidden-view player-night fixed inset-0 z-50 flex flex-col">
+        <div class="relative flex justify-between items-center p-4 md:p-6">
+            <button onclick="toggleView('menu')" class="chrome-btn" title="Minimizar">
+                <i class="ph ph-caret-down text-xl"></i>
             </button>
-            <span class="text-[11px] md:text-xs font-bold tracking-widest uppercase opacity-60">Reproduciendo ahora</span>
-            <button onclick="toggleLike()" id="like-btn" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center hover:bg-white/40 transition text-rose-500">
-                <i class="ph-fill ph-heart text-2xl"></i>
+            <span class="font-mono text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase text-cream/50">Reproduciendo ahora</span>
+            <button onclick="toggleLike()" id="like-btn" class="chrome-btn" title="Me gusta">
+                <i class="ph-fill ph-heart text-xl"></i>
             </button>
         </div>
 
-        <div id="player-content" class="flex-1 flex flex-col md:flex-row items-start justify-center gap-8 md:gap-12 px-4 md:px-6 pt-4 md:pt-6 pb-32 player-content">
+        <div id="player-content" class="relative flex-1 flex flex-col md:flex-row items-start justify-center gap-8 md:gap-12 px-4 md:px-6 pt-4 md:pt-6 pb-32 player-content">
             <div class="w-full md:max-w-xl flex flex-col items-center gap-6">
-                <div class="relative w-64 h-64 md:w-96 md:h-96 flex-shrink-0 vinyl-wrap">
+                <div class="relative flex-shrink-0 vinyl-wrap">
+                    <div class="compass-pointer" aria-hidden="true"></div>
                     <div id="player-vinyl" class="vinyl-record w-full h-full rounded-full animate-spin-slow">
-                        <div id="player-cover" class="vinyl-label w-1/2 h-1/2 shadow-inner"></div>
+                        <div class="compass-ticks" id="compass-ticks" aria-hidden="true"></div>
+                        <div id="player-cover" class="vinyl-label"></div>
+                        <div class="compass-pin" aria-hidden="true"></div>
                     </div>
                 </div>
 
                 <div class="w-full max-w-md flex flex-col gap-5 text-center">
                     <div>
-                        <h2 id="player-title" class="text-3xl md:text-5xl font-serif font-bold text-cocoa mb-2">Título Canción</h2>
-                        <p id="player-artist" class="text-lg md:text-xl opacity-75 font-serif italic">Artista / Capítulo</p>
+                        <p id="player-chapter" class="font-mono text-[11px] md:text-xs font-bold uppercase tracking-[0.25em] text-brass-light mb-2"></p>
+                        <h2 id="player-title" class="text-3xl md:text-5xl font-serif font-semibold text-cream mb-2">Título Canción</h2>
+                        <div class="flex items-center justify-center gap-2 flex-wrap">
+                            <p id="player-artist" class="font-hand text-xl md:text-2xl text-cream/85">Artista / Capítulo</p>
+                            <span id="player-type-badge"></span>
+                        </div>
                     </div>
 
                     <div class="w-full">
                         <input type="range" id="progress-bar" value="0" min="0" max="100" class="w-full h-1 rounded-lg appearance-none cursor-pointer">
-                        <div class="flex justify-between text-xs font-mono opacity-60 mt-2">
+                        <div class="flex justify-between font-mono text-xs text-cream/55 mt-2">
                             <span id="current-time">0:00</span>
                             <span id="duration-time">0:00</span>
                         </div>
                     </div>
 
                     <div class="flex items-center justify-center gap-6">
-                        <button onclick="playPrev()" class="text-3xl hover:scale-110 transition opacity-70 hover:opacity-100"><i class="ph-fill ph-skip-back"></i></button>
+                        <button onclick="playPrev()" class="skip-btn text-3xl"><i class="ph-fill ph-skip-back"></i></button>
 
-                        <button id="play-pause-btn" onclick="togglePlay()" class="w-20 h-20 bg-gradient-to-tr from-rose-400 to-rose-300 rounded-full shadow-lg flex items-center justify-center text-white text-4xl hover:shadow-xl hover:scale-105 transition transform">
+                        <button id="play-pause-btn" onclick="togglePlay()" class="play-btn-main">
                             <i class="ph-fill ph-play ml-1"></i>
                         </button>
 
-                        <button onclick="playNext()" class="text-3xl hover:scale-110 transition opacity-70 hover:opacity-100"><i class="ph-fill ph-skip-forward"></i></button>
+                        <button onclick="playNext()" class="skip-btn text-3xl"><i class="ph-fill ph-skip-forward"></i></button>
                     </div>
 
                 </div>
@@ -305,30 +636,30 @@
 
             <div class="w-full md:max-w-lg flex flex-col gap-4">
                 <div class="flex items-center justify-center md:justify-start gap-3">
-                    <button id="dedication-nav" onclick="scrollToDedication()" class="glass-panel px-4 py-2 rounded-full text-xs font-semibold">⭐ Dedicatoria</button>
-                    <button id="lyrics-toggle" onclick="toggleLyrics()" class="glass-panel px-4 py-2 rounded-full text-xs font-semibold">🎵 Ocultar Letras</button>
+                    <button id="dedication-nav" onclick="scrollToDedication()" class="glass-panel px-4 py-2 rounded-full text-xs font-semibold hover:bg-white/60 hover:-translate-y-0.5 transition-all duration-300">⭐ Dedicatoria</button>
+                    <button id="lyrics-toggle" onclick="toggleLyrics()" class="glass-panel px-4 py-2 rounded-full text-xs font-semibold hover:bg-white/60 hover:-translate-y-0.5 transition-all duration-300">🎵 Ocultar Letras</button>
                 </div>
                 <div id="dedication-card" class="glass-panel dedication-box p-5 rounded-2xl relative group">
-                    <div class="absolute top-0 left-0 w-1 h-full bg-rose-400"></div>
-                    <h3 class="text-xs font-bold uppercase tracking-widest text-rose-500 mb-2">Dedicatoria</h3>
-                    <p id="player-dedication" class="text-sm md:text-base leading-relaxed italic opacity-90">Selecciona una canción para ver el mensaje especial...</p>
+                    <div class="absolute top-0 left-0 w-1 h-full bg-terracotta rounded-l-2xl"></div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-terracotta mb-2">💌 Dedicatoria</h3>
+                    <p id="player-dedication" class="text-sm md:text-base leading-relaxed text-ink/90">Selecciona una canción para ver el mensaje especial...</p>
                 </div>
 
                 <div id="lyrics-card" class="glass-panel p-5 rounded-2xl">
-                    <h3 class="text-xs font-bold uppercase tracking-widest text-rose-500 mb-2">Letra</h3>
-                    <div id="lyrics-container" class="lyrics-box text-sm md:text-base leading-relaxed italic opacity-90"></div>
+                    <h3 class="text-xs font-bold uppercase tracking-widest text-terracotta mb-2">🎼 Letra</h3>
+                    <div id="lyrics-container" class="lyrics-box text-sm md:text-base leading-relaxed text-ink/90"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="mini-player" onclick="toggleView('player')" class="fixed bottom-3 md:bottom-4 left-3 right-3 md:left-4 md:right-4 glass-panel rounded-2xl p-3 flex items-center gap-3 md:gap-4 shadow-2xl cursor-pointer transform translate-y-32 transition-transform duration-500 z-40 border border-white/60">
-        <div id="mini-cover" class="w-11 h-11 md:w-12 md:h-12 rounded-full bg-cover bg-center border-2 border-white animate-spin-slow"></div>
+    <div id="mini-player" onclick="toggleView('player')" class="fixed bottom-3 md:bottom-4 left-3 right-3 md:left-4 md:right-4 glass-panel rounded-2xl p-3 flex items-center gap-3 md:gap-4 shadow-2xl cursor-pointer transform translate-y-32 transition-transform duration-500 z-40">
+        <div id="mini-cover" class="w-11 h-11 md:w-12 md:h-12 rounded-full bg-cover bg-center border-2 border-brass animate-spin-slow"></div>
         <div class="flex-1 min-w-0">
-            <h4 id="mini-title" class="font-bold text-cocoa truncate text-sm">Selecciona una canción</h4>
-            <p id="mini-artist" class="text-xs opacity-70 truncate">Nuestra Historia</p>
+            <h4 id="mini-title" class="font-serif font-semibold text-ink truncate text-sm">Selecciona una canción</h4>
+            <p id="mini-artist" class="text-xs text-ink-soft/80 truncate">Nuestra Historia</p>
         </div>
-        <button onclick="event.stopPropagation(); togglePlay()" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/60 hover:bg-white text-cocoa transition">
+        <button onclick="event.stopPropagation(); togglePlay()" class="w-10 h-10 flex items-center justify-center rounded-full bg-terracotta/90 hover:bg-terracotta text-cream transition">
             <i id="mini-play-icon" class="ph-fill ph-play text-lg"></i>
         </button>
     </div>
@@ -340,6 +671,8 @@
         let currentTrackIndex = 0;
         let isPlaying = false;
         let lyricsVisible = true;
+
+        const TILT_SEQUENCE = [-1.4, 1.1, -0.7, 1.6, -1.1, 0.8, -1.6, 1.3, -0.9, 0.6];
 
         const audio = document.getElementById('audio-element');
         const songsGrid = document.getElementById('songs-grid');
@@ -362,9 +695,14 @@
         const playerContent = document.getElementById('player-content');
 
         function init() {
+            buildCompassDecor();
             renderSongs();
             setupAudioListeners();
-            setupPetals();
+
+            const statsEl = document.getElementById('album-stats');
+            if (statsEl) {
+                statsEl.textContent = `📖 ${tracks.length} canciones · nuestra historia sigue creciendo`;
+            }
 
             const urlParams = new URLSearchParams(window.location.search);
             const id = parseInt(urlParams.get('id'));
@@ -375,26 +713,69 @@
             }
         }
 
+        function compassRingSVG(color) {
+            let lines = '';
+            for (let i = 0; i < 24; i++) {
+                const deg = i * 15;
+                const major = deg % 90 === 0;
+                const len = major ? 16 : 8;
+                const width = major ? 2.2 : 1.1;
+                const op = major ? 0.9 : 0.5;
+                lines += `<line x1="100" y1="4" x2="100" y2="${4 + len}" transform="rotate(${deg} 100 100)" stroke="${color}" stroke-width="${width}" stroke-linecap="round" opacity="${op}"/>`;
+            }
+            const labels = [[0, 'N'], [90, 'E'], [180, 'S'], [270, 'W']]
+                .map(([deg, t]) => `<text x="100" y="34" text-anchor="middle" transform="rotate(${deg} 100 100)" font-family="'Space Mono', monospace" font-size="14" font-weight="700" fill="${color}">${t}</text>`)
+                .join('');
+            const minor = [45, 135, 225, 315]
+                .map(deg => `<circle cx="100" cy="14" r="1.6" transform="rotate(${deg} 100 100)" fill="${color}" opacity="0.6"/>`)
+                .join('');
+            return `<svg viewBox="0 0 200 200" class="w-full h-full" preserveAspectRatio="xMidYMid meet">${lines}${labels}${minor}<circle cx="100" cy="100" r="96" fill="none" stroke="${color}" stroke-width="1.5" opacity="0.5"/></svg>`;
+        }
+
+        function buildCompassDecor() {
+            const disc = document.getElementById('compass-ticks');
+            const hero = document.getElementById('hero-compass');
+            if (disc) disc.innerHTML = compassRingSVG('#FBF5E6');
+            if (hero) hero.innerHTML = compassRingSVG('#A8792E');
+        }
+
+        function typeBadge(type) {
+            if (!type) return '';
+            const icons = { Original: '✒️', Cover: '🎤', Aniversario: '🧭' };
+            const icon = icons[type] || '•';
+            return `<span class="patch">${icon} ${type}</span>`;
+        }
+
         function renderSongs() {
             songsGrid.innerHTML = tracks.map((track, index) => {
                 const cover = track.coverImage || '';
                 const title = track.title || 'Sin título';
                 const artist = track.artist || '-';
                 const chapter = track.description || `Capítulo ${track.id}`;
+                const num = String(index + 1).padStart(2, '0');
+                const badge = typeBadge(track.type);
+                const tilt = TILT_SEQUENCE[index % TILT_SEQUENCE.length];
+                const newRibbon = track.isNew ? `<span class="entry-new">✨ Nuevo</span>` : '';
 
                 return `
-                <button type="button" onclick="openTrack(${index})" class="song-card group glass-panel p-4 rounded-2xl cursor-pointer hover:bg-white/40 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl flex items-center gap-4 w-full text-left">
-                    <div class="w-20 h-20 rounded-xl flex-shrink-0 shadow-md overflow-hidden bg-gradient-to-br from-rose-300 to-pink-400">
-                        ${cover ? `<img src="${cover}" alt="${title}" class="w-full h-full object-cover">` : ''}
+                <button type="button" onclick="openTrack(${index})" style="animation-delay:${Math.min(index * 0.07, 0.7)}s; --tilt:${tilt}deg;" class="entry-card">
+                    ${newRibbon}
+                    <div class="entry-photo">
+                        ${cover ? `<img src="${cover}" alt="${title}" loading="lazy">` : ''}
+                        <span class="entry-tape" aria-hidden="true"></span>
+                        <span class="entry-stamp">N°${num}</span>
                     </div>
 
-                    <div class="flex-1 min-w-0">
-                        <p class="text-xs font-bold text-rose-500 tracking-[0.2em] uppercase mb-1">${chapter}</p>
-                        <h3 class="text-xl font-serif font-bold text-cocoa truncate">${title}</h3>
-                        <p class="text-sm text-cocoa/70 truncate">${artist}</p>
+                    <div class="entry-body">
+                        <p class="entry-chapter truncate">${chapter}</p>
+                        <h3 class="entry-title truncate">${title}</h3>
+                        <div class="entry-meta">
+                            <span class="entry-artist truncate">${artist}</span>
+                            ${badge}
+                        </div>
                     </div>
 
-                    <span class="song-play-btn group-hover:bg-white/80 transition">
+                    <span class="entry-play">
                         <i class="ph-fill ph-play"></i>
                     </span>
                 </button>
@@ -417,19 +798,26 @@
             playerTitle.innerText = track.title || 'Sin título';
             playerArtist.innerText = track.artist || '-';
             playerDedication.innerText = track.dedication || 'Sin dedicatoria';
+            document.getElementById('player-chapter').innerText = track.description || `Capítulo ${track.id}`;
+            document.getElementById('player-type-badge').innerHTML = typeBadge(track.type);
 
             if (track.coverImage) {
                 playerCover.style.background = `url('${track.coverImage}') center/cover`;
                 document.getElementById('mini-cover').style.backgroundImage = `url('${track.coverImage}')`;
             } else {
-                playerCover.style.background = 'linear-gradient(135deg,#f472b6,#fb7185)';
+                playerCover.style.background = 'linear-gradient(135deg,var(--terracotta),var(--brass))';
                 document.getElementById('mini-cover').style.backgroundImage = 'none';
-                document.getElementById('mini-cover').style.background = 'linear-gradient(135deg,#f472b6,#fb7185)';
+                document.getElementById('mini-cover').style.background = 'linear-gradient(135deg,var(--terracotta),var(--brass))';
             }
 
             document.getElementById('mini-title').innerText = track.title || 'Sin título';
             document.getElementById('mini-artist').innerText = track.artist || '-';
             miniPlayer.classList.remove('translate-y-32');
+
+            progressBar.value = 0;
+            progressBar.style.background = 'rgba(255,255,255,0.25)';
+            currentTimeEl.innerText = '0:00';
+            durationTimeEl.innerText = '0:00';
 
             renderLyrics(track.lyrics || []);
             lyricsVisible = true;
@@ -439,7 +827,7 @@
             playerView.scrollTop = 0;
 
             const likes = getLikes();
-            likeBtn.classList.toggle('text-rose-600', likes.includes(track.id));
+            likeBtn.classList.toggle('liked', likes.includes(track.id));
 
             window.history.replaceState({}, '', `player.html?id=${track.id}`);
 
@@ -464,7 +852,7 @@
                 const section = text.match(/^\[(.*)\]$/);
                 if (section) {
                     if (sectionOpen) html += '</div>';
-                    html += `<div class="mb-5"><p class="text-xs uppercase tracking-[0.2em] text-rose-500 font-bold mb-2">${section[1]}</p>`;
+                    html += `<div class="mb-5"><p class="text-xs uppercase tracking-[0.2em] text-terracotta font-bold mb-2">${section[1]}</p>`;
                     sectionOpen = true;
                 } else {
                     if (!sectionOpen) {
@@ -525,13 +913,15 @@
 
         function setupAudioListeners() {
             audio.addEventListener('timeupdate', () => {
-                const percent = (audio.currentTime / audio.duration) * 100;
-                progressBar.value = percent || 0;
+                const percent = (audio.currentTime / audio.duration) * 100 || 0;
+                progressBar.value = percent;
+                progressBar.style.background = `linear-gradient(to right, #C97148 ${percent}%, rgba(255,255,255,0.25) ${percent}%)`;
                 currentTimeEl.innerText = formatTime(audio.currentTime);
                 durationTimeEl.innerText = formatTime(audio.duration || 0);
             });
 
             progressBar.addEventListener('input', (e) => {
+                progressBar.style.background = `linear-gradient(to right, #C97148 ${e.target.value}%, rgba(255,255,255,0.25) ${e.target.value}%)`;
                 if (!audio.duration) return;
                 const seekTime = (audio.duration / 100) * e.target.value;
                 audio.currentTime = seekTime;
@@ -597,22 +987,10 @@
             }
 
             localStorage.setItem('likedTracks', JSON.stringify(likes));
-            likeBtn.classList.toggle('text-rose-600', likes.includes(trackId));
-        }
-
-        function setupPetals() {
-            const container = document.getElementById('petals-container');
-            for (let i = 0; i < 16; i++) {
-                const petal = document.createElement('div');
-                petal.classList.add('petal');
-                const size = Math.random() * 10 + 5;
-                petal.style.width = `${size}px`;
-                petal.style.height = `${size}px`;
-                petal.style.left = `${Math.random() * 100}%`;
-                petal.style.animationDuration = `${Math.random() * 8 + 10}s`;
-                petal.style.animationDelay = `${Math.random() * 8}s`;
-                container.appendChild(petal);
-            }
+            likeBtn.classList.toggle('liked', likes.includes(trackId));
+            likeBtn.classList.remove('heart-pop');
+            void likeBtn.offsetWidth;
+            likeBtn.classList.add('heart-pop');
         }
 
         init();
